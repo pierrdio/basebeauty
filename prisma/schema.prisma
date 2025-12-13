@@ -10,10 +10,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       BigInt   @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   login    String
   password String
 
@@ -21,19 +22,26 @@ model User {
 }
 
 model Work {
-  id     BigInt   @id @default(autoincrement())
-  title  String
-  photo  String
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String   @default("")
+  photos      String   @default("[]") // JSON array of photo URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("works")
 }
 
-model Offer {
-  id              BigInt   @id @default(autoincrement())
-  title_project   String
-  telephone       String
-  description     String
-  file            String
+model ContactSubmission {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  message   String
+  fileUrl   String?
+  fileName  String?
+  status    String   @default("new") // new, in_progress, completed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("offers")
+  @@map("contact_submissions")
 }
