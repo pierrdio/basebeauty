@@ -59,7 +59,6 @@ export function SimpleHeader() {
 					</Button>
 					<SheetContent
 						className="bg-background/95 supports-backdrop-filter:bg-background/80 gap-0 backdrop-blur-lg"
-						showClose={false}
 						side="left"
 					>
 						<div className="grid gap-y-2 overflow-y-auto px-4 pt-12 pb-5">

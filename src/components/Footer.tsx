@@ -27,7 +27,7 @@ export default function Footer() {
                 <div className="p-px bg-linear-to-tl from-gray-500 via-gray-950 to-stone-400 rounded-lg">
                     <div className="bg-black rounded-lg">
                         <Link
-                            href="#portfolio"
+                            href="/#portfolio"
                             className="flex items-center justify-center bg-[#222222] text-white text-base max-sm:text-xs font-normal border-0 rounded-lg py-2 lg:py-4 px-3 lg:px-5 cursor-pointer hover:bg-[#333333] transition-colors whitespace-nowrap h-12 lg:h-14"
                         >
                             Портфолио
@@ -37,7 +37,7 @@ export default function Footer() {
                 <div className="p-px bg-linear-to-tl from-gray-500 via-gray-950 to-stone-400 rounded-lg">
                     <div className="bg-black rounded-lg">
                         <Link
-                            href="#services"
+                            href="/#services"
                             className="flex items-center justify-center bg-[#222222] text-white text-base max-sm:text-xs font-normal border-0 rounded-lg py-2 lg:py-4 px-3 lg:px-5 cursor-pointer hover:bg-[#333333] transition-colors whitespace-nowrap h-12 lg:h-14"
                         >
                             Услуги
@@ -47,7 +47,7 @@ export default function Footer() {
                 <div className="p-px bg-linear-to-tl from-gray-500 via-gray-950 to-stone-400 rounded-lg">
                     <div className="bg-black rounded-lg">
                         <Link
-                            href="#contact"
+                            href="/#contact"
                             className="flex items-center justify-center bg-[#222222] text-white text-base max-sm:text-xs font-normal border-0 rounded-lg py-2 lg:py-4 px-3 lg:px-5 cursor-pointer hover:bg-[#333333] transition-colors whitespace-nowrap h-12 lg:h-14"
                         >
                             Связаться с нами

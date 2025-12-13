@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, Cloud, MessageSquare, Eye } from "lucide-react"
+import { Bell, Cloud, MessageSquare, Eye, LogOut } from "lucide-react"
 
 import {
   Avatar,
@@ -19,6 +19,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import {
   Dialog,
@@ -36,7 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 interface AppHeaderProps {
@@ -48,6 +51,34 @@ interface AppHeaderProps {
 export function AppHeader({ newSubmissions = 0, newSubmissionsList = [], onStatusUpdate }: AppHeaderProps) {
   const [selectedSubmission, setSelectedSubmission] = useState<any>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [user, setUser] = useState<{login: string} | null>(null)
+  const router = useRouter()
+
+  // Получить данные пользователя при монтировании
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('/api/auth/me')
+        if (response.ok) {
+          const userData = await response.json()
+          setUser(userData.user)
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+    fetchUser()
+  }, [])
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      toast.success('Выход из системы выполнен')
+      router.push('/admin-login')
+    } catch (error) {
+      toast.error('Ошибка при выходе из системы')
+    }
+  }
 
   const handleOpenSubmission = (submission: any) => {
     setSelectedSubmission(submission)
@@ -142,10 +173,22 @@ export function AppHeader({ newSubmissions = 0, newSubmissionsList = [], onStatu
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Avatar className="border-primary h-9 w-9 border-2">
-            <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-            <AvatarFallback>US</AvatarFallback>
-          </Avatar>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="border-primary h-9 w-9 border-2 cursor-pointer">
+                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
+                <AvatarFallback>
+                  {user?.login ? user.login.slice(0, 2).toUpperCase() : 'AD'}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Выйти
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
