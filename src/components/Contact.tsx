@@ -116,7 +116,7 @@ export default function Contact() {
     };
     return (
         <section id="contact" className="relative left-1/2 -translate-x-1/2 w-screen py-16 bg-black mt-10">
-            <div className="max-w-7xl mx-auto px-8">
+            <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div>
                         <Card className="bg-black border-none shadow-none">
