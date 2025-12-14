@@ -10,7 +10,8 @@ export default function ServiceBlockDesign({ title }: { title: string }) {
     const isProduction = title === "ПРОИЗВОДСТВО";
 
     return (
-        <div className="w-full relative bg-black p-6 sm:p-8 rounded-lg overflow-hidden bg-[url('/servicebg.png')] bg-repeat bg-cover flex flex-col sm:flex-row justify-between">
+        <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-lg w-full">
+            <div className="w-full relative bg-black p-6 sm:p-8 rounded-lg overflow-hidden bg-[url('/servicebg.png')] bg-repeat bg-cover flex flex-col sm:flex-row justify-between">
             <div className="relative z-10 flex-1 mb-6 sm:mb-0">
                 <h3 className="w-fit rounded-xl bg-[#1DCD9F] px-6 py-3 text-white mb-6 sm:mb-8 font-semibold text-2xl sm:text-4xl">
                     {title}
@@ -22,8 +23,8 @@ export default function ServiceBlockDesign({ title }: { title: string }) {
                     ))}
                 </div>
             </div>
-            {!isProduction && (
-                <div className="flex flex-col items-center max-w-[150px] justify-between sm:ml-6">
+            {/* {!isProduction && (
+                <div className="flex flex-col items-center max-w-37.5 justify-between sm:ml-6">
                     <Image
                         src="/ogni_desing.png"
                         alt="Огни дизайн"
@@ -35,7 +36,8 @@ export default function ServiceBlockDesign({ title }: { title: string }) {
                         Посмотреть<br />работы
                     </Link>
                 </div>
-            )}
+            )} */}
+            </div>
         </div>
     );
 }

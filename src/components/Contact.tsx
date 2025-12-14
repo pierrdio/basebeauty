@@ -20,6 +20,15 @@ export default function Contact() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Check file size (50MB limit)
+            const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+            if (file.size > maxSize) {
+                toast.error(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(1)}MB). Максимальный размер - 50MB`);
+                // Reset file input
+                e.target.value = '';
+                setFileName("Прикрепите файл");
+                return;
+            }
             setFileName(file.name);
         } else {
             setFileName("Прикрепите файл");

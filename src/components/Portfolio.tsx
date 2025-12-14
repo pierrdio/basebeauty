@@ -23,7 +23,9 @@ export default function Portfolio() {
                 const data = await res.json();
                 console.log('Portfolio - Raw works data:', data);
                 console.log('Portfolio - First work structure:', data[0]);
-                setWorks(data);
+                // Sort by ID descending to show latest works first
+                const sortedWorks = data.sort((a: Work, b: Work) => b.id - a.id);
+                setWorks(sortedWorks);
             } catch (error) {
                 console.error('Portfolio - Error fetching works:', error);
             } finally {
@@ -120,10 +122,11 @@ export default function Portfolio() {
                             key={work.id}
                             className={`col-span-${position.colSpan} row-span-${position.rowSpan} col-start-${position.colStart} row-start-${position.rowStart}`}
                         >
-                            <div 
-                                className="group relative h-full w-full overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101"
-                                onClick={() => router.push(`/works/${work.id}`)}
-                            >
+                            <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-3xl h-full w-full">
+                                <div 
+                                    className="group relative h-full w-full overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101"
+                                    onClick={() => router.push(`/works/${work.id}`)}
+                                >
                                 <Image
                                     src={getPhotoUrl(work)}
                                     alt={work.title}
@@ -133,6 +136,7 @@ export default function Portfolio() {
                                 <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
                                     {work.title}
                                 </div>
+                            </div>
                             </div>
                         </div>
                     );

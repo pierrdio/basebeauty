@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { SimplePhotoPreview } from "@/components/ui/simple-photo-preview"
 
 type Work = {
     id: number,
@@ -15,6 +17,8 @@ type PhotoItem = string | { fileName: string; fileUrl: string }
 export default function WorkPage() {
     const [work, setWork] = useState<Work | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [previewIndex, setPreviewIndex] = useState(0);
     const params = useParams();
     const workId = params.id;
 
@@ -62,10 +66,33 @@ export default function WorkPage() {
         console.error('Error parsing photos:', error);
     }
 
+    // Convert photos to format expected by PhotoPreview
+    const previewPhotos = photos.map((photo, index) => {
+        if (typeof photo === 'string') {
+            return {
+                fileName: `${work.title} - фото ${index + 1}`,
+                fileUrl: photo
+            };
+        } else {
+            return photo;
+        }
+    });
+
+    const openPreview = (index: number) => {
+        setPreviewIndex(index);
+        setIsPreviewOpen(true);
+    };
+
+    const closePreview = () => {
+        setIsPreviewOpen(false);
+    };
+
     return (
         <main className="mx-auto flex w-full max-w-7xl px-4 flex-col gap-4 pt-30">
-            <div className="rounded-4xl bg-[#111111] p-4 text-white max-w-xl flex-1 mb-10 w-fit">
-                <h1 className="text-6xl font-semibold text-[#00D89F]">{work.title}</h1>
+            <div className="max-w-xl flex-1 mb-10 w-fit p-px bg-linear-to-bl from-gray-500 via-gray-900 to-stone-200 rounded-4xl">
+                <div className="bg-black rounded-4xl p-4">
+                    <h1 className="text-6xl font-semibold text-[#00D89F] text-center w-full">{work.title}</h1>
+                </div>
             </div>
             
             {photos.length === 0 ? (
@@ -74,7 +101,7 @@ export default function WorkPage() {
                 </div>
             ) : (
                 <section className="py-10">
-                    <div className="grid grid-cols-6 grid-rows-8 gap-4 min-h-[900px]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]">
                         {photos.map((photo, index) => {
                             // Handle both string URLs and objects with fileUrl property
                             let photoUrl = '';
@@ -87,25 +114,27 @@ export default function WorkPage() {
                             // Skip if no photo
                             if (!photoUrl) return null;
                             
-                            // Dynamic grid positioning based on index
-                            const positions = [
-                                { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 1 },
-                                { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 1 },
-                                { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 3 },
-                                { colSpan: 2, rowSpan: 4, colStart: 5, rowStart: 5 },
-                                { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 4 },
-                                { colSpan: 4, rowSpan: 2, colStart: 1, rowStart: 7 },
-                                { colSpan: 2, rowSpan: 1, colStart: 5, rowStart: 9 },
+                            // Different patterns for visual variety - unique patterns for individual work page
+                            const patterns = [
+                                { grid: 'lg:col-span-3 lg:row-span-2', ratio: 16/9 }, // Large horizontal (main photo)
+                                { grid: 'lg:col-span-1 lg:row-span-1', ratio: 1 }, // Small square
+                                { grid: 'lg:col-span-1 lg:row-span-1', ratio: 1 }, // Small square
+                                { grid: 'lg:col-span-2 lg:row-span-2', ratio: 1 }, // Medium square
+                                { grid: 'lg:col-span-1 lg:row-span-2', ratio: 2/3 }, // Tall vertical
+                                { grid: 'lg:col-span-2 lg:row-span-1', ratio: 16/9 }, // Wide horizontal
+                                { grid: 'lg:col-span-1 lg:row-span-1', ratio: 1 }, // Small square
+                                { grid: 'lg:col-span-1 lg:row-span-1', ratio: 1 }, // Small square
                             ];
                             
-                            const position = positions[index % positions.length];
+                            const pattern = patterns[index % patterns.length];
                             
                             return (
                                 <div 
                                     key={index}
-                                    className={`col-span-${position.colSpan} row-span-${position.rowSpan} col-start-${position.colStart} row-start-${position.rowStart}`}
+                                    className={`${pattern.grid} relative group overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101`}
+                                    onClick={() => openPreview(index)}
                                 >
-                                    <div className="group relative h-full w-full overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101">
+                                    <AspectRatio ratio={pattern.ratio} className="w-full h-full">
                                         <img
                                             src={photoUrl}
                                             alt={`${work.title} - фото ${index + 1}`}
@@ -118,13 +147,21 @@ export default function WorkPage() {
                                                 }
                                             }}
                                         />
-                                    </div>
+                                    </AspectRatio>
                                 </div>
                             );
                         })}
                     </div>
                 </section>
             )}
+            
+            {/* Simple Photo Preview Modal */}
+            <SimplePhotoPreview 
+                photos={previewPhotos}
+                initialIndex={previewIndex}
+                isOpen={isPreviewOpen}
+                onClose={closePreview}
+            />
         </main>
     )
 }

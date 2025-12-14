@@ -22,7 +22,9 @@ export default function Works() {
                 const data = await res.json();
                 console.log('Raw works data:', data);
                 console.log('First work structure:', data[0]);
-                setWorks(data);
+                // Sort by ID descending to show latest works first
+                const sortedWorks = data.sort((a: Work, b: Work) => b.id - a.id);
+                setWorks(sortedWorks);
             } catch (error) {
                 console.error('Error fetching works:', error);
             } finally {
@@ -34,21 +36,49 @@ export default function Works() {
 
     return (
         <main className="mx-auto flex w-full max-w-7xl px-4 flex-col gap-4 pt-30">
-            <div className="rounded-4xl bg-[#111111] p-4 text-white max-w-xl flex-1 mb-10 w-fit">
-                <h1 className="text-6xl font-semibold text-[#00D89F]">Все наши работы</h1>
+            <div className="max-w-xl flex-1 mb-10 w-fit p-px bg-linear-to-bl from-gray-500 via-gray-900 to-stone-200 rounded-4xl">
+                <div className="bg-black rounded-4xl p-4">
+                    <h1 className="text-6xl font-semibold text-[#00D89F] text-center w-full">Все наши работы</h1>
+                </div>
             </div>
             
             {isLoading ? (
-                <div className="text-center py-20">
-                    <p className="text-xl text-gray-600">Загрузка работ...</p>
-                </div>
+                <section className="py-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]">
+                        {/* Skeleton items matching the works grid structure */}
+                        <div className="lg:col-span-2 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-1 lg:row-span-2 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-1 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-2 lg:row-span-2 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-1 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-2 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-1 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                        <div className="lg:col-span-1 lg:row-span-1 relative group overflow-hidden rounded-3xl">
+                            <div className="animate-pulse h-full w-full bg-gray-300/20"></div>
+                        </div>
+                    </div>
+                </section>
             ) : works.length === 0 ? (
                 <div className="text-center py-20">
                     <p className="text-xl text-gray-600">Нет работ</p>
                 </div>
             ) : (
                 <section className="py-10">
-                    <div className="grid grid-cols-6 grid-rows-8 gap-4 min-h-[900px]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]">
                         {works.map((work, index) => {
                             // Parse photos JSON and get first photo
                             let photoUrl = '';
@@ -85,46 +115,43 @@ export default function Works() {
                                 return null;
                             }
                             
-                            // Dynamic grid positioning based on index
-                            const positions = [
-                                { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 1 },
-                                { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 1 },
-                                { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 3 },
-                                { colSpan: 2, rowSpan: 4, colStart: 5, rowStart: 5 },
-                                { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 4 },
-                                { colSpan: 4, rowSpan: 2, colStart: 1, rowStart: 7 },
-                                { colSpan: 2, rowSpan: 1, colStart: 5, rowStart: 9 },
+                            // Different patterns for visual variety - wide, tall, square
+                            const patterns = [
+                                'lg:col-span-2 lg:row-span-1', // Wide horizontal
+                                'lg:col-span-1 lg:row-span-2', // Tall vertical  
+                                'lg:col-span-1 lg:row-span-1', // Square
+                                'lg:col-span-2 lg:row-span-2', // Large square
+                                'lg:col-span-1 lg:row-span-1', // Square
+                                'lg:col-span-2 lg:row-span-1', // Wide horizontal
                             ];
                             
-                            const position = positions[index % positions.length];
+                            const patternClass = patterns[index % patterns.length];
                             
                             return (
                                 <div 
                                     key={work.id}
-                                    className={`col-span-${position.colSpan} row-span-${position.rowSpan} col-start-${position.colStart} row-start-${position.rowStart}`}
+                                    className={`${patternClass} relative group overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101`}
                                     onClick={() => router.push(`/works/${work.id}`)}
                                 >
-                                    <div className="group relative h-full w-full overflow-hidden rounded-3xl cursor-pointer transition hover:scale-101">
-                                        <img
-                                            src={photoUrl}
-                                            alt={work.title}
-                                            className="w-full h-full object-cover"
-                                            onError={(e) => {
-                                                console.error('Image load error:', photoUrl, 'Full error:', e);
-                                                // Try fallback image
-                                                if (typeof photoUrl === 'string' && photoUrl !== '/img1.webp') {
-                                                    e.currentTarget.src = '/img1.webp';
-                                                } else {
-                                                    e.currentTarget.style.display = 'none';
-                                                }
-                                            }}
-                                            onLoad={() => {
-                                                console.log('Image loaded successfully:', photoUrl);
-                                            }}
-                                        />
-                                        <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                                            {work.title}
-                                        </div>
+                                    <img
+                                        src={photoUrl}
+                                        alt={work.title}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            console.error('Image load error:', photoUrl, 'Full error:', e);
+                                            // Try fallback image
+                                            if (typeof photoUrl === 'string' && photoUrl !== '/img1.webp') {
+                                                e.currentTarget.src = '/img1.webp';
+                                            } else {
+                                                e.currentTarget.style.display = 'none';
+                                            }
+                                        }}
+                                        onLoad={() => {
+                                            console.log('Image loaded successfully:', photoUrl);
+                                        }}
+                                    />
+                                    <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
+                                        {work.title}
                                     </div>
                                 </div>
                             );

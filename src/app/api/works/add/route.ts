@@ -32,10 +32,7 @@ export async function POST(request: NextRequest) {
             const filePath = join(uploadDir, randomFileName);
             const bytes = await file.arrayBuffer();
             const buffer = Buffer.from(bytes);
-            // basic size limit: 100MB per file
-            if (buffer.length > 100 * 1024 * 1024) {
-                return NextResponse.json({ error: 'Файл слишком большой (макс 100MB)' }, { status: 400 });
-            }
+            // Removed size limit - no file size restrictions
             await writeFile(filePath, buffer);
             savedFiles.push({ fileName: file.name, fileUrl: `/api/uploads/works/${randomFileName}` });
         }

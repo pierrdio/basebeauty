@@ -11,23 +11,22 @@ interface PhotoUploadProps {
   maxFiles?: number
 }
 
-export function PhotoUpload({ value, onChange, maxFiles = 10 }: PhotoUploadProps) {
+export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
   const [previewUrls, setPreviewUrls] = useState<string[]>([])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = [...value, ...acceptedFiles].slice(0, maxFiles)
+    const newFiles = [...value, ...acceptedFiles]
     onChange(newFiles)
     
     const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file))
     setPreviewUrls(prev => [...prev, ...newPreviews])
-  }, [value, onChange, maxFiles])
+  }, [value, onChange])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
     },
-    maxFiles,
     multiple: true
   })
 
@@ -74,7 +73,7 @@ export function PhotoUpload({ value, onChange, maxFiles = 10 }: PhotoUploadProps
       {value.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Выбранные фотографии ({value.length}/{maxFiles}):</p>
+            <p className="text-sm font-medium">Выбранные фотографии ({value.length}):</p>
             {value.length > 0 && (
               <Button
                 variant="outline"

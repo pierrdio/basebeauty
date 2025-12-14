@@ -37,7 +37,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#222222] min-h-screen ${(isDashboard || isAdminLogin) ? "" : "flex flex-col"}`}
+        className={`${geistSans.variable} ${geistMono.variable} font-tt-runs antialiased bg-[#222222] min-h-screen ${(isDashboard || isAdminLogin) ? "" : "flex flex-col"}`}
       >
         {!(isDashboard || isAdminLogin) && <Header />}
         {(isDashboard || isAdminLogin) ? (

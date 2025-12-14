@@ -12,14 +12,14 @@ export default function Footer() {
         <footer className="bg-[#000000] w-full px-8 py-12">
             <div className="flex flex-col lg:flex-row justify-between items-start mb-8 gap-6">
                 <div className="flex flex-col gap-2">
-                    <span className="text-white text-xl lg:text-2xl font-medium">+7 (495) 710-72-98</span>
+                    <Link className="text-white text-xl lg:text-2xl font-medium" href="tel:+74957107298">+7 (495) 710-72-98</Link>
                     <span className="text-white font-light text-base lg:text-lg">10:00-19:00/ Пн-пт</span>
                 </div>
                 <div className="text-center lg:text-left">
                     <span className="text-white text-xl lg:text-2xl font-medium">Адрес: Село Рыболово, 240Б</span>
                 </div>
                 <div className="flex flex-col gap-2 text-center lg:text-right">
-                    <span className="text-white text-xl lg:text-2xl">mail@basebeauty.ru</span>
+                    <Link className="text-white text-xl lg:text-2xl" href="mailto:mail@basebeauty.ru">mail@basebeauty.ru</Link>
                 </div>
             </div>
             <div className="h-px bg-linear-to-r from-white via-gray-800 to-white my-6 opacity-30"></div>
@@ -60,7 +60,7 @@ export default function Footer() {
 
             <div className="flex flex-col lg:flex-row justify-center items-center text-lg text-gray-400 gap-4 lg:gap-10">
                 <span>© 1993-{getYear()} Все права защищены</span>
-                <span className="hover:text-white cursor-pointer transition-colors">Политика конфиденциальности</span>
+                {/* <span className="hover:text-white cursor-pointer transition-colors">Политика конфиденциальности</span> */}
             </div>
         </footer>
     )

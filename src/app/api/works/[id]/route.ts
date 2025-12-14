@@ -56,9 +56,7 @@ export async function PUT(
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
         
-        if (buffer.length > 100 * 1024 * 1024) {
-          continue; // Skip files larger than 100MB
-        }
+        // Removed size limit - no file size restrictions
         
         await writeFile(filePath, buffer);
         savedFiles.push({ fileName: file.name, fileUrl: `/api/uploads/works/${randomFileName}` });

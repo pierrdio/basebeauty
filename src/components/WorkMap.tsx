@@ -29,7 +29,7 @@ export default function WorkMap() {
             <div className="relative left-1/2 -translate-x-1/2 w-screen py-8 bg-black overflow-hidden">
                 {/* Title */}
                 <div className="absolute top-4 left-4 z-20">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white bg-black bg-opacity-70 px-4 py-2 rounded-full">
+                    <h2 className="text-2xl md:text-3xl font-bold text-white bg-black bg-opacity-70 px-4 py-4 rounded-full">
                         Карта работы
                     </h2>
                 </div>
@@ -124,9 +124,13 @@ export default function WorkMap() {
         <div className="relative left-1/2 -translate-x-1/2 w-screen py-16 bg-black overflow-hidden">
             {/* Title */}
             <div className="absolute top-8 left-8 z-20">
-                <h2 className="text-3xl md:text-4xl font-bold text-white bg-black bg-opacity-70 px-6 py-2 rounded-full">
-                    Карта работы
-                </h2>
+                <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-xl">
+                    <div className="bg-[#222] bg-opacity-70 rounded-xl px-6 py-2">
+                        <h2 className="text-5xl md:text-6xl font-bold text-white">
+                            Карта работы
+                        </h2>
+                    </div>
+                </div>
             </div>
 
             {/* Background grid */}

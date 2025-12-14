@@ -34,7 +34,8 @@ export default function HeroRelease() {
     ];
 
     return (
-        <div className="rounded-4xl bg-[#111111] pt-4 sm:pt-6 text-white w-full flex-1 flex flex-col min-h-[500px] sm:min-h-[600px] gap-4">
+        <div className="p-px bg-linear-to-br from-gray-500 via-gray-900 to-stone-200 rounded-4xl w-full flex-1">
+            <div className="rounded-4xl bg-[#111111] pt-4 sm:pt-6 text-white w-full flex-1 flex flex-col min-h-[500px] sm:min-h-[600px] gap-4">
             <div className="px-6">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#00D89F] mb-4 sm:mb-6">
                     Реализуем все ваши идеи
@@ -71,6 +72,7 @@ export default function HeroRelease() {
             <Link href="#contact" className="w-full mt-auto rounded-full border-2 border-[#00D89F] py-3 sm:py-4 text-center text-lg sm:text-xl font-semibold text-white hover:bg-[#00D89F] hover:text-black transition-colors">
                 Отправить бриф
             </Link>
+            </div>
         </div>
     );
 }
