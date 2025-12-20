@@ -34,6 +34,7 @@ import {
 import { sidebarItems } from "./data"
 
 import Image from 'next/image';
+import Link from "next/link"
 
 export function AppSidebar() {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
@@ -60,7 +61,7 @@ export function AppSidebar() {
             />
           </div>
           <div>
-            <h2 className="font-semibold">BaseBeauty</h2>
+            <Link href='/' className="font-semibold">BaseBeauty</Link>
           </div>
         </div>
 

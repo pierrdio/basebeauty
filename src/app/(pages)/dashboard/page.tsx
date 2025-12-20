@@ -134,7 +134,7 @@ export default function Dashboard() {
   }, [contactSubmissions]);
 
   return (
-    <div className="bg-background relative min-h-screen overflow-hidden">
+    <div className="bg-background relative min-h-screen overflow-hidden font-onest">
       {/* Animated gradient background */}
       <motion.div
         className="absolute inset-0 -z-10 opacity-20"
@@ -157,7 +157,7 @@ export default function Dashboard() {
         <AppSidebar />
         <SidebarInset>
           <AppHeader newSubmissions={newSubmissionsCount} newSubmissionsList={newSubmissionsList} onStatusUpdate={fetchContactSubmissions} />
-          <main className="flex-1 p-4 md:p-6">
+          <main className="flex-1 p-4 md:p-6 font-onest">
             <Tabs
               defaultValue="home"
               value={activeTab}
@@ -203,10 +203,10 @@ export default function Dashboard() {
                               <SheetTrigger asChild>
                                 <div className="flex items-center gap-2">
                                   <Plus className="mr-2 h-4 w-4" />
-                                  <Button variant="default">Добавить работу</Button>
+                                  <Button variant="link" className="text-white hover:underline-offset-6">Добавить работу</Button>
                                 </div>
                               </SheetTrigger>
-                              <SheetContent>
+                              <SheetContent className="font-onest overflow-auto">
                                 <SheetHeader>
                                   <SheetTitle>Добавить работу</SheetTitle>
                                   <SheetDescription>

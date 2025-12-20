@@ -183,6 +183,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
     const filteredKeys = keys.filter(key => {
       // Скрываем эти поля для всех типов данных
       if (hideActions && key === 'fileName') return false;
+      if (key === 'updatedAt') return false; // Убираем столбец "Обновлено" для всех типов данных
       
       // Скрываем эти поля только для contact submissions (которые есть поле phone)
       if (data[0]?.hasOwnProperty('phone')) {
@@ -474,11 +475,13 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
               ) : (
                 <div 
                   className={`
-                    ${typeof value === 'string' && value.length > 50 
-                      ? 'max-w-xs truncate' 
-                      : typeof value === 'string' && value.length > 20 
-                        ? 'max-w-xs wrap-break-word line-clamp-2' 
-                        : 'max-w-[150px] truncate whitespace-nowrap'
+                    ${col === 'title' || col === 'description'
+                      ? 'max-w-xs whitespace-normal wrap-break-word' 
+                      : typeof value === 'string' && value.length > 50 
+                        ? 'max-w-xs truncate' 
+                        : typeof value === 'string' && value.length > 20 
+                          ? 'max-w-xs wrap-break-word line-clamp-2' 
+                          : 'max-w-[150px] truncate whitespace-nowrap'
                     }
                   `}
                   title={value}
@@ -504,7 +507,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
         const isContactSubmission = rowData.hasOwnProperty('phone');
         
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-start">
             {isContactSubmission && (
               <Button
                 size={"sm"}
@@ -580,7 +583,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: paginationOptions[0] || 5 } },
+    initialState: { pagination: { pageSize: 10 } },
   });
 
   // CSV Download
@@ -615,9 +618,9 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
       ) : (
         <>
           {/* Search + Download */}
-          <div className="py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="py-3 flex flex-col gap-3">
             <h1 className="text-base font-semibold text-gray-900 dark:text-white">{tableTitle}</h1>
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <Input
                 type="text"
                 className="max-w-full sm:max-w-80 lg:min-w-64 min-w-0 placeholder:text-gray-400 dark:placeholder:text-white/20 h-9"
@@ -641,23 +644,17 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
                   </SelectContent>
                 </Select>
               )}
-              <Button
-                onClick={handleDownload}
-                className="p-2 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white h-9 shrink-0"
-              >
-                <Icon icon="material-symbols:download-rounded" width={18} height={18} />
-              </Button>
             </div>
           </div>
 
           {/* Table */}
-          <div className="w-full overflow-x-auto overflow-y-visible border border-gray-200 dark:border-gray-700 rounded-lg">
-            <Table className="w-full min-w-[800px] text-sm">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+            <Table className="w-full min-w-275 md:min-w-600 text-sm md:table-fixed">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="bg-gray-50 dark:bg-white/5">
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} className="cursor-pointer select-none px-3 py-2 text-sm font-medium whitespace-nowrap">
+                      <TableHead key={header.id} className={`cursor-pointer select-none px-3 py-2 text-sm font-medium whitespace-nowrap ${header.column.id === 'id' ? 'w-10' : header.column.id === 'photos' ? 'w-10' : header.column.id === 'createdAt' ? 'w-10' : header.column.id === 'name' ? 'w-10' : header.column.id === 'phone' ? 'w-10' : header.column.id === 'message' ? 'w-20' : header.column.id === 'status' ? 'w-15' : header.column.id === 'title' ? 'w-20' : header.column.id === 'description' ? 'w-20' : header.column.id === 'action' ? 'w-15' : ''}`}>
                         {header.isPlaceholder ? null : (
                           <Button
                             className="flex items-center gap-1 px-1 bg-transparent hover:bg-transparent text-gray-700 dark:text-gray-300 font-semibold text-sm h-auto py-1"
@@ -684,7 +681,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
                   table.getRowModel().rows.map((row) => (
                     <TableRow key={row.original.id} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/10">
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} className="px-3 py-2 text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                        <TableCell key={cell.id} className={`px-3 py-2 text-gray-700 dark:text-gray-300 whitespace-nowrap ${cell.column.id === 'id' ? 'w-20' : cell.column.id === 'photos' ? 'w-10' : cell.column.id === 'createdAt' ? 'w-10' : cell.column.id === 'name' ? 'w-10' : cell.column.id === 'phone' ? 'w-10' : cell.column.id === 'message' ? 'w-20' : cell.column.id === 'status' ? 'w-15' : cell.column.id === 'title' ? 'w-20' : cell.column.id === 'description' ? 'w-20' : cell.column.id === 'action' ? 'w-32' : ''}`}>
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}
@@ -705,53 +702,27 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex flex-col gap-3 p-3 border-t border-gray-200 dark:border-white/10">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div className="flex gap-2 w-full sm:w-auto justify-center sm:justify-start">
-                <Button
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  variant={"secondary"}
-                  className="disabled:bg-gray-300 dark:disabled:bg-white/30 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 text-white h-8 px-3 text-sm"
-                >
-                  Назад
-                </Button>
-                <Button
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                  className="disabled:bg-gray-300 dark:disabled:bg-white/30 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 text-white h-8 px-3 text-sm"
-                >
-                  Вперед
-                </Button>
-              </div>
+          <div className="flex flex-col items-center gap-3 p-3 border-t border-gray-200 dark:border-white/10">
+            <div className="flex gap-2 justify-center">
+              <Button
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                variant={"secondary"}
+                className="disabled:bg-gray-300 dark:disabled:bg-white/30 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 text-white h-8 px-3 text-sm"
+              >
+                Назад
+              </Button>
+              <Button
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                className="disabled:bg-gray-300 dark:disabled:bg-white/30 disabled:cursor-not-allowed bg-blue-500 hover:bg-blue-600 text-white h-8 px-3 text-sm"
+              >
+                Вперед
+              </Button>
+            </div>
 
-              <div className="text-gray-700 dark:text-gray-300 font-medium text-sm text-center">
-                Страница {table.getState().pagination.pageIndex + 1} из {table.getPageCount()}
-              </div>
-
-              <div className="flex items-center gap-2 justify-center sm:justify-end">
-                <Label
-                  htmlFor="pageSize"
-                  className="mr-0 text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap"
-                >
-                  Строк:
-                </Label>
-                <Select
-                  value={String(table.getState().pagination.pageSize)}
-                  onValueChange={(value) => table.setPageSize(Number(value))}
-                >
-                  <SelectTrigger className="w-16 h-8">
-                    <SelectValue placeholder="Строк" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {paginationOptions.map((size) => (
-                      <SelectItem key={size} value={String(size)}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="text-gray-700 dark:text-gray-300 font-medium text-sm text-center">
+              Страница {table.getState().pagination.pageIndex + 1} из {table.getPageCount()}
             </div>
           </div>
         </>
@@ -790,7 +761,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
 
       {/* View Contact Submission Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-125 font-onest">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Eye className="h-4 w-4" />

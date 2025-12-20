@@ -8,14 +8,14 @@ export default function WorkMap() {
 
     useEffect(() => {
         setIsClient(true);
-        
+
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1349);
         };
-        
+
         checkMobile();
         window.addEventListener('resize', checkMobile);
-        
+
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
@@ -28,10 +28,14 @@ export default function WorkMap() {
         return (
             <div className="relative left-1/2 -translate-x-1/2 w-screen py-8 bg-black overflow-hidden">
                 {/* Title */}
-                <div className="absolute top-4 left-4 z-20">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white bg-black bg-opacity-70 px-4 py-4 rounded-full">
-                        Карта работы
-                    </h2>
+                <div className="absolute top-2 left-4 z-20">
+                    <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-xl">
+                        <div className="bg-[#222] bg-opacity-70 rounded-xl px-3 py-1">
+                            <h2 className="text-lg md:text-xl font-bold text-white font-onest-bold">
+                                Карта работы
+                            </h2>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Background grid */}
@@ -40,74 +44,74 @@ export default function WorkMap() {
                         className="w-full h-full"
                         style={{
                             backgroundImage: `
-                                linear-gradient(to right, rgba(0,255,150,0.1) 1px, transparent 1px),
-                                linear-gradient(to bottom, rgba(0,255,150,0.1) 1px, transparent 1px)
-                            `,
-                            backgroundSize: '30px 30px',
+                            linear-gradient(to right, rgba(22, 153, 118, 0.37) 1px, transparent 3px),
+                            linear-gradient(to bottom, rgba(22, 153, 118, 0.37) 1px, transparent 3px)
+                        `,
+                            backgroundSize: '75px 75px',
                         }}
                     />
                 </div>
 
-                {/* Mobile content - вертикальная компоновка */}
+                {/* Mobile content - вертикальная компоновка с улучшенными стрелками */}
                 <div className="relative z-10 w-full p-4">
                     <div className="w-full max-w-md mx-auto space-y-6">
                         {/* Принятие брифа */}
                         <WorkMapNode label="Принятие брифа" />
-                        
-                        {/* Стрелка вниз */}
+
+                        {/* Стрелка вниз - улучшенная версия */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
                         {/* Разработка дизайна */}
                         <WorkMapNode label="Разработка дизайна" />
-                        
+
                         {/* Стрелка вниз */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
                         {/* Осмечивание-согласование */}
                         <WorkMapNode label="Осмечивание-согласование" />
-                        
+
                         {/* Стрелка вниз */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
                         {/* Тех проработка-черчение */}
                         <WorkMapNode label="Тех проработка-черчение" />
-                        
+
                         {/* Стрелка вниз */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
                         {/* Производство */}
                         <WorkMapNode label="Производство" />
-                        
+
                         {/* Стрелка вниз */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
                         {/* Доставка */}
                         <WorkMapNode label="Доставка" />
-                        
+
                         {/* Стрелка вниз */}
                         <div className="flex justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
+                                <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
 
@@ -139,10 +143,10 @@ export default function WorkMap() {
                     className="w-full h-full"
                     style={{
                         backgroundImage: `
-                            linear-gradient(to right, rgba(0,255,150,0.1) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(0,255,150,0.1) 1px, transparent 1px)
+                            linear-gradient(to right, rgba(22, 153, 118, 0.37) 1px, transparent 3px),
+                            linear-gradient(to bottom, rgba(22, 153, 118, 0.37) 1px, transparent 3px)
                         `,
-                        backgroundSize: '50px 50px',
+                        backgroundSize: '75px 75px',
                     }}
                 />
             </div>
@@ -245,7 +249,7 @@ export default function WorkMap() {
 // Individual WorkMap Node Component
 function WorkMapNode({ label }: { label: string }) {
     return (
-        <div className="relative w-full h-full rounded-lg p-4 text-white text-center hover:scale-105 transition-transform duration-200 cursor-pointer flex items-center justify-center"
+        <div className="relative w-full h-full rounded-lg p-4 text-white text-center hover:scale-101 transition-transform duration-200 cursor-pointer flex items-center justify-center font-onest-medium"
             style={{
                 background: 'linear-gradient(180deg, rgba(217, 217, 217, 0.20) 0%, rgba(115, 115, 115, 0.20) 100%)',
                 boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
@@ -276,7 +280,7 @@ function WorkMapNode({ label }: { label: string }) {
             <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#1DCD9F]"></span>
 
             {/* Text content */}
-            <span className="text-sm md:text-base font-medium relative z-10">
+            <span className="text-sm md:text-xl font-medium relative z-10">
                 {label}
             </span>
         </div>

@@ -9,7 +9,7 @@ export default function Footer() {
     }
 
     return (
-        <footer className="bg-[#000000] w-full px-8 py-12">
+        <footer className="bg-[#000000] w-full px-8 py-12 font-onest">
             <div className="flex flex-col lg:flex-row justify-between items-start mb-8 gap-6">
                 <div className="flex flex-col gap-2">
                     <Link className="text-white text-xl lg:text-2xl font-medium" href="tel:+74957107298">+7 (495) 710-72-98</Link>

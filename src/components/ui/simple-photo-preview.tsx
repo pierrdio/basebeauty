@@ -62,7 +62,7 @@ export function SimplePhotoPreview({ photos, initialIndex = 0, isOpen, onClose }
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 transition-all duration-300 ease-out ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 transition-all duration-300 ease-out font-onest ${
         isAnimating ? 'opacity-100' : 'opacity-0'
       }`}
       onClick={handleClose}

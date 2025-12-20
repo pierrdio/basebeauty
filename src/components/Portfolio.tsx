@@ -57,30 +57,35 @@ export default function Portfolio() {
         return '/img1.webp'; // fallback
     };
 
+    // Helper function to truncate title
+    const truncateTitle = (title: string, maxLength: number = 25) => {
+        return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+    };
+
     if (isLoading) {
         return (
             <section id="portfolio" className="py-10">
-                <div className="grid grid-cols-6 grid-rows-8 gap-4 min-h-[900px]">
-                    {/* Skeleton items matching the grid structure */}
-                    <div className="col-span-4 row-span-3 col-start-1 row-start-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 auto-rows-[200px] min-h-[900px]">
+                    {/* Skeleton items matching the adaptive grid structure */}
+                    <div className="col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-4 lg:row-span-3 lg:col-start-1 lg:row-start-1">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-2 row-span-2 col-start-5 row-start-1">
+                    <div className="col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-5 lg:row-start-1">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-2 row-span-2 col-start-5 row-start-3">
+                    <div className="col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-5 lg:row-start-3">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-2 row-span-4 col-start-5 row-start-5">
+                    <div className="col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-2 lg:row-span-4 lg:col-start-5 lg:row-start-5">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-2 row-span-2 col-start-1 row-start-4">
+                    <div className="col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-1 lg:row-start-4">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-2 row-span-2 col-start-3 row-start-4">
+                    <div className="col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-3 lg:row-start-4">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
-                    <div className="col-span-4 row-span-3 col-start-1 row-start-6">
+                    <div className="col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-4 lg:row-span-3 lg:col-start-1 lg:row-start-6">
                         <div className="animate-pulse h-full w-full bg-gray-300 rounded-3xl"></div>
                     </div>
                 </div>
@@ -101,26 +106,34 @@ export default function Portfolio() {
 
     return (
         <section id="portfolio" className="py-10">
-            <div className="grid grid-cols-6 grid-rows-8 gap-4 min-h-[900px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 auto-rows-[200px] min-h-[900px]">
                 {displayWorks.slice(0, 7).map((work, index) => {
-                    // Define grid positions for up to 7 items
-                    const positions = [
-                        { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 1 }, // Item 1
-                        { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 1 }, // Item 2
-                        { colSpan: 2, rowSpan: 2, colStart: 5, rowStart: 3 }, // Item 3
-                        { colSpan: 2, rowSpan: 4, colStart: 5, rowStart: 5 }, // Item 4
-                        { colSpan: 2, rowSpan: 2, colStart: 1, rowStart: 4 }, // Item 5
-                        { colSpan: 2, rowSpan: 2, colStart: 3, rowStart: 4 }, // Item 6
-                        { colSpan: 4, rowSpan: 3, colStart: 1, rowStart: 6 }, // Item 7
-                    ];
-                    
-                    const position = positions[index];
-                    if (!position) return null;
+                    // Define adaptive grid positions for up to 7 items
+                    const getGridClasses = (index: number) => {
+                        switch(index) {
+                            case 0: // Item 1 - large top
+                                return "col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-4 lg:row-span-3 lg:col-start-1 lg:row-start-1";
+                            case 1: // Item 2 - top right
+                                return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-5 lg:row-start-1";
+                            case 2: // Item 3 - middle right
+                                return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-5 lg:row-start-3";
+                            case 3: // Item 4 - bottom right tall
+                                return "col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-2 lg:row-span-4 lg:col-start-5 lg:row-start-5";
+                            case 4: // Item 5 - middle left
+                                return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-1 lg:row-start-4";
+                            case 5: // Item 6 - middle center
+                                return "col-span-1 row-span-1 sm:col-span-1 sm:row-span-1 lg:col-span-2 lg:row-span-2 lg:col-start-3 lg:row-start-4";
+                            case 6: // Item 7 - bottom large
+                                return "col-span-1 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-4 lg:row-span-3 lg:col-start-1 lg:row-start-6";
+                            default:
+                                return "col-span-1 row-span-1";
+                        }
+                    };
                     
                     return (
                         <div 
                             key={work.id}
-                            className={`col-span-${position.colSpan} row-span-${position.rowSpan} col-start-${position.colStart} row-start-${position.rowStart}`}
+                            className={getGridClasses(index)}
                         >
                             <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-3xl h-full w-full">
                                 <div 
@@ -133,8 +146,8 @@ export default function Portfolio() {
                                     fill
                                     className="object-cover"
                                 />
-                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                                    {work.title}
+                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                    {truncateTitle(work.title)}
                                 </div>
                             </div>
                             </div>

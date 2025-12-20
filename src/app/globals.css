@@ -94,6 +94,7 @@
   --font-sans: 'TT Runs', var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-tt-runs: 'TT Runs', system-ui, sans-serif;
+  --font-onest: 'Onest', system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -273,8 +274,33 @@ body::-webkit-scrollbar-thumb:active,
   }
 }
 
-/* TT Runs utility classes */
-.font-tt-runs {
-  font-family: 'TT Runs', system-ui, sans-serif;
+/* Onest utility classes */
+.font-onest {
+  font-family: 'Onest', system-ui, sans-serif;
+  font-weight: 300;
+}
+
+.font-onest-light {
+  font-family: 'Onest', system-ui, sans-serif;
+  font-weight: 300;
+}
+
+.font-onest-normal {
+  font-family: 'Onest', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+.font-onest-medium {
+  font-family: 'Onest', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+.font-onest-semibold {
+  font-family: 'Onest', system-ui, sans-serif;
   font-weight: 600;
+}
+
+.font-onest-bold {
+  font-family: 'Onest', system-ui, sans-serif;
+  font-weight: 700;
 }

@@ -34,31 +34,27 @@ export default function HeroRelease() {
     ];
 
     return (
-        <div className="p-px bg-linear-to-br from-gray-500 via-gray-900 to-stone-200 rounded-4xl w-full flex-1">
-            <div className="rounded-4xl bg-[#111111] pt-4 sm:pt-6 text-white w-full flex-1 flex flex-col min-h-[500px] sm:min-h-[600px] gap-4">
+        <div className="p-px bg-linear-to-br from-gray-500 via-gray-900 to-stone-200 rounded-4xl w-full flex-1 max-sm:rounded-3xl">
+            <div className="rounded-4xl max-sm:rounded-3xl bg-[#111111] pt-4 sm:pt-6 text-white w-full flex-1 flex flex-col min-h-[500px] sm:min-h-[600px] gap-4">
             <div className="px-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#00D89F] mb-4 sm:mb-6">
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-semibold text-[#00D89F] mb-4 sm:mb-6">
                     Реализуем все ваши идеи
                 </h1>
 
                 <div className="flex-grow flex flex-col gap-4 sm:gap-6">
-                <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row">
-                    <ul className="flex flex-1 flex-col gap-3">
-                        <HeroAdvantage {...advantages[0]} />
-                        <HeroAdvantage {...advantages[2]} />
-                    </ul>
-                    <ul className="flex flex-1 flex-col gap-3">
-                        <HeroAdvantage {...advantages[1]} />
-                        <HeroAdvantage {...advantages[3]} />
-                    </ul>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <HeroAdvantage {...advantages[0]} />
+                    <HeroAdvantage {...advantages[2]} />
+                    <HeroAdvantage {...advantages[1]} />
+                    <HeroAdvantage {...advantages[3]} />
                 </div>
 
                 <div className="flex justify-center">
                     <ul>
                         <li className="flex w-full items-start justify-between rounded-xl bg-[#222222] px-6 py-3 text-white">
                             <div className="space-y-1 pr-4">
-                                <h3 className="text-2xl font-semibold leading-snug">{advantages[4].title}</h3>
-                                <p className="text-sm leading-snug text-[#E4E4E4]">{advantages[4].description}</p>
+                                <h3 className="text-2xl font-semibold leading-snug font-onest-bold">{advantages[4].title}</h3>
+                                <p className="text-md leading-snug text-[#E4E4E4] font-onest-medium">{advantages[4].description}</p>
                             </div>
                             <div className="mt-1 flex items-start justify-end text-white">
                                 {advantages[4].icon}
@@ -69,7 +65,7 @@ export default function HeroRelease() {
             </div>
             </div>
 
-            <Link href="#contact" className="w-full mt-auto rounded-full border-2 border-[#00D89F] py-3 sm:py-4 text-center text-lg sm:text-xl font-semibold text-white hover:bg-[#00D89F] hover:text-black transition-colors">
+            <Link href="#contact" className="w-full mt-auto rounded-4xl border-2 border-[#00D89F] py-2 sm:py-2 text-center text-md sm:text-5xl font-semibold text-white hover:bg-[#00D89F] hover:text-black transition-colors font-onest-semibold">
                 Отправить бриф
             </Link>
             </div>

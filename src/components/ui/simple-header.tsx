@@ -39,7 +39,7 @@ export function SimpleHeader() {
 					{links.map((link) => (
 						<div key={link.href} className='w-full relative flex'>
 							<Link
-								className={buttonVariants({ className: 'text-white text-xl group relative w-max m-1 bg-transparent hover:bg-transparent' })}
+								className={buttonVariants({ className: 'text-white text-xl font-onest-medium group relative w-max m-1 bg-transparent hover:bg-transparent' })}
 								href={link.href}
 							>
 								{link.label}
@@ -67,9 +67,10 @@ export function SimpleHeader() {
 									key={link.href}
 									className={buttonVariants({
 										variant: 'ghost',
-										className: 'justify-start',
+										className: 'justify-start font-onest-medium',
 									})}
 									href={link.href}
+									onClick={() => setOpen(false)}
 								>
 									{link.label}
 								</Link>

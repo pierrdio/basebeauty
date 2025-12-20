@@ -76,7 +76,12 @@ export default function HeroWorks() {
         );
     }
 
-    // Use real works if available, otherwise show fallback
+    // Helper function to truncate title
+    const truncateTitle = (title: string, maxLength: number = 25) => {
+        return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+    };
+
+    // Use real works if available, otherwise fallback
     const displayWorks = works.length > 0 ? works : [
         { id: 1, title: "Работа 1", photos: '["/img1.webp"]' },
         { id: 2, title: "Работа 2", photos: '["/img1.webp"]' },
@@ -84,12 +89,12 @@ export default function HeroWorks() {
     ];
 
     return (
-        <div className="flex flex-col gap-7 w-full">
+        <div className="flex flex-col gap-7 w-full h-full">
             {/* Верхнее большое изображение - последняя работа */}
             {displayWorks[0] && (
-                <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-2xl sm:rounded-3xl">
+                <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-2xl sm:rounded-3xl flex-1">
                     <div 
-                        className="relative w-full h-64 sm:h-80 overflow-hidden rounded-2xl sm:rounded-3xl cursor-pointer transition hover:scale-101"
+                        className="relative w-full h-64 sm:h-117 overflow-hidden rounded-2xl sm:rounded-3xl cursor-pointer transition hover:scale-101"
                         onClick={() => router.push(`/works/${displayWorks[0].id}`)}
                     >
                     <Image
@@ -99,15 +104,15 @@ export default function HeroWorks() {
                             className="object-cover"
                             priority
                         />
-                        <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                            {displayWorks[0].title}
+                        <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                            {truncateTitle(displayWorks[0].title)}
                         </div>
                     </div>
                 </div>
             )}
             
             {/* Нижняя часть - изображения и кнопка */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
                 {/* Левое изображение - вторая работа */}
                 {displayWorks[1] && (
                     <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-2xl sm:rounded-3xl">
@@ -121,8 +126,8 @@ export default function HeroWorks() {
                                 fill
                                 className="object-cover"
                             />
-                            <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                                {displayWorks[1].title}
+                            <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                {truncateTitle(displayWorks[1].title)}
                             </div>
                         </div>
                     </div>
@@ -143,8 +148,8 @@ export default function HeroWorks() {
                                     fill
                                     className="object-cover"
                                 />
-                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                                    {displayWorks[2].title}
+                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                    {truncateTitle(displayWorks[2].title)}
                                 </div>
                             </div>
                         </div>
@@ -161,8 +166,8 @@ export default function HeroWorks() {
                                     fill
                                     className="object-cover"
                                 />
-                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
-                                    {displayWorks[1].title}
+                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                    {truncateTitle(displayWorks[1].title)}
                                 </div>
                             </div>
                         </div>
@@ -181,7 +186,7 @@ export default function HeroWorks() {
                     )}
                     
                     {/* Кнопка */}
-                    <Link href="/works" className="w-full rounded-full border-2 border-[#00D89F] py-3 text-center text-lg sm:text-xl font-semibold text-white hover:bg-[#00D89F] hover:text-black transition-colors">
+                    <Link href="/works" className="w-full rounded-full border-2 border-[#00D89F] py-3 text-center text-md sm:text-3xl font-semibold text-white hover:bg-[#00D89F] hover:text-black transition-colors font-onest-semibold">
                         Ещё работы
                     </Link>
                 </div>

@@ -7,6 +7,8 @@ import { Label } from "./ui/label";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "./ui/checkbox";
+import Link from "next/link";
 
 export default function Contact() {
     const [fileName, setFileName] = useState("Прикрепите файл");
@@ -45,46 +47,46 @@ export default function Contact() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Validation
         if (!formData.name.trim()) {
             toast.error('Пожалуйста, введите название проекта');
             return;
         }
-        
+
         if (!formData.phone.trim()) {
             toast.error('Пожалуйста, введите телефон');
             return;
         }
-        
+
         if (!formData.message.trim()) {
             toast.error('Пожалуйста, опишите задачу');
             return;
         }
-        
+
         // Phone validation (more flexible for Russian numbers)
         const phoneRegex = /^[\d\s\-\(\)]+$/;
         const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, '');
-        
+
         if (!phoneRegex.test(formData.phone)) {
             toast.error('Пожалуйста, введите номер телефона (только цифры, скобки, дефисы)');
             return;
         }
-        
+
         if (cleanPhone.length < 10 || cleanPhone.length > 11) {
             toast.error('Пожалуйста, введите корректный номер телефона (10-11 цифр)');
             return;
         }
 
         setIsSubmitting(true);
-        
+
         try {
             const formElement = e.target as HTMLFormElement;
             const formDataToSend = new FormData();
             formDataToSend.append('name', formData.name);
             formDataToSend.append('phone', formData.phone);
             formDataToSend.append('message', formData.message);
-            
+
             const fileInput = formElement.querySelector('#file') as HTMLInputElement;
             if (fileInput.files && fileInput.files[0]) {
                 formDataToSend.append('file', fileInput.files[0]);
@@ -98,7 +100,7 @@ export default function Contact() {
             if (response.ok) {
                 const result = await response.json();
                 toast.success('Проект успешно отправлен! Мы свяжемся с вами в ближайшее время.');
-                
+
                 // Reset form
                 setFormData({ name: '', phone: '', message: '' });
                 setFileName('Прикрепите файл');
@@ -125,7 +127,7 @@ export default function Contact() {
                                     <CardHeader>
                                         <div className="p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
                                             <div className="bg-black rounded-full">
-                                                <CardTitle className="text-white p-3 bg-[#222222] rounded-xl text-center w-full text-5xl">Обсудить проект</CardTitle>
+                                                <CardTitle className="text-white p-3 bg-[#222222] rounded-xl text-center w-full text-5xl max-lg:text-3xl">Обсудить проект</CardTitle>
                                             </div>
                                         </div>
                                     </CardHeader>
@@ -141,7 +143,7 @@ export default function Contact() {
                                                             placeholder="НАЗВАНИЕ ПРОЕКТА"
                                                             value={formData.name}
                                                             onChange={handleInputChange}
-                                                            className="bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6"
+                                                            className="bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6 font-onest-medium max-lg:placeholder:text-xs"
                                                             maxLength={100}
                                                             required
                                                         />
@@ -156,7 +158,7 @@ export default function Contact() {
                                                             placeholder="+7"
                                                             value={formData.phone}
                                                             onChange={handleInputChange}
-                                                            className="bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6"
+                                                            className="bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6 font-onest-medium max-lg:placeholder:text-xs"
                                                             maxLength={18}
                                                             required
                                                         />
@@ -170,12 +172,12 @@ export default function Contact() {
                                                             placeholder="ОПИШИТЕ ЗАДАЧУ"
                                                             value={formData.message}
                                                             onChange={handleInputChange}
-                                                            className="w-full bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6 px-4 pr-16 h-25 resize-none"
+                                                            className="w-full bg-[#222222] text-white text-lg font-medium placeholder:text-white placeholder:text-lg border-0 rounded-lg py-6 px-4 pr-16 h-25 resize-none font-onest-medium max-lg:placeholder:text-xs"
                                                             maxLength={250}
                                                             required
                                                         />
                                                         <div className="absolute bottom-3 right-3">
-                                                            <span className={`text-xs ${formData.message.length >= 200 ? 'text-yellow-400' : 'text-gray-400'}`}>
+                                                            <span className={`text-xs font-onest-medium ${formData.message.length >= 200 ? 'text-yellow-400' : 'text-gray-400'}`}>
                                                                 {formData.message.length}/250
                                                             </span>
                                                         </div>
@@ -191,20 +193,28 @@ export default function Contact() {
                                                             accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .gif, .webp, .zip, .rar"
                                                             onChange={handleFileChange}
                                                         />
-                                                        <div className="bg-[#222222] text-white uppercase font-medium py-3 px-3 rounded-lg border-0 flex h-13 cursor-pointer hover:bg-[#444444] transition-colors text-lg">
+                                                        <div className="bg-[#222222] text-white uppercase font-medium py-3 px-3 rounded-lg border-0 flex h-13 cursor-pointer hover:bg-[#444444] transition-colors text-lg font-onest-medium max-lg:text-xs items-center">
                                                             <span>{fileName}</span>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div className="flex items-start gap-3">
+                                                    <Checkbox id="privacy" required />
+                                                    <div className="grid gap-2 font-onest-medium">
+                                                        <Label htmlFor="privacy" className="text-white">Согласие с политикой конфиденциальности</Label>
+                                                        <p className="text-gray-400 text-sm">
+                                                            Нажимая на этот чекбокс, вы соглашаетесь с <Link href="/privacy-policy" className="text-white hover:underline" target="_blank">политикой конфиденциальности.</Link>
+                                                        </p>
+                                                    </div>
+                                                </div>
                                                 <div className="flex flex-col gap-3">
-                                                    <Button 
+                                                    <Button
                                                         type="submit"
                                                         disabled={isSubmitting}
-                                                        className={`w-full text-4xl p-8 cursor-pointer mx-auto text-white transition-all duration-300 ${
-                                                            isSubmitting 
-                                                                ? 'bg-blue-600 hover:bg-blue-700 scale-95 opacity-90' 
-                                                                : 'bg-[#222222] hover:bg-[#444444] hover:scale-105'
-                                                        } disabled:cursor-not-allowed disabled:opacity-50`}
+                                                        className={`w-full text-4xl p-8 cursor-pointer mx-auto text-white transition-all duration-300 max-lg:text-3xl ${isSubmitting
+                                                            ? 'bg-blue-600 hover:bg-blue-700 scale-95 opacity-90'
+                                                            : 'bg-[#222222] hover:bg-[#444444] hover:scale-105'
+                                                            } disabled:cursor-not-allowed disabled:opacity-50`}
                                                     >
                                                         {isSubmitting ? (
                                                             <div className="flex items-center justify-center gap-3">
@@ -226,7 +236,7 @@ export default function Contact() {
                     <div className="flex justify-center lg:justify-end flex-col gap-5 my-6">
                         <div className="p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
                             <div className="bg-black rounded-full">
-                                <CardTitle className="text-white p-3 bg-[#222222] rounded-xl text-center w-full text-5xl">Где мы находимся</CardTitle>
+                                <CardTitle className="text-white p-3 bg-[#222222] rounded-xl text-center w-full text-5xl max-lg:text-3xl">Где мы находимся</CardTitle>
                             </div>
                         </div>
                         <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A43a8b9689fc779a25d7a0fa2f9cff04ad88ee701dc4baaba69eeb53ca2c4e18c&amp;source=constructor" className="rounded-xl max-w-full h-[475px]"></iframe>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Onest } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -17,8 +17,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const onest = Onest({
+  subsets: ['latin'],
+  variable: '--font-onest',
+})
+
 export const metadata: Metadata = {
-  title: "BaseBeaty",
+  title: "Base Beauty",
   description: "Эксклюзивное оформление мероприятий от компании «Base-Beauty» - это визитная карточка самого высокого уровня",
 };
 
@@ -37,7 +42,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-tt-runs antialiased bg-[#222222] min-h-screen ${(isDashboard || isAdminLogin) ? "" : "flex flex-col"}`}
+        className={`${geistSans.variable} ${geistMono.variable} ${onest.variable} font-tt-runs antialiased bg-[#222222] min-h-screen ${(isDashboard || isAdminLogin) ? "font-onest" : "flex flex-col"}`}
       >
         {!(isDashboard || isAdminLogin) && <Header />}
         {(isDashboard || isAdminLogin) ? (

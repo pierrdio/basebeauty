@@ -150,7 +150,7 @@ export default function Works() {
                                             console.log('Image loaded successfully:', photoUrl);
                                         }}
                                     />
-                                    <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit">
+                                    <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest">
                                         {work.title}
                                     </div>
                                 </div>
