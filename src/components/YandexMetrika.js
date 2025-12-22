@@ -9,10 +9,20 @@ const YM_COUNTER_ID = 105967815; // Замените на ваш ID счетчи
 const YandexMetrika = () => {
   const pathname = usePathname();
 
+  // Инициализация и отправка первого хита
+  useEffect(() => {
+    // Отправляем хит на текущую страницу
+    if (typeof window !== 'undefined' && pathname) {
+      console.log('Sending Yandex Metrika hit:', pathname);
+      ym(YM_COUNTER_ID, "hit", window.location.href);
+    }
+  }, []);
+
   // Отправляем событие "hit" при изменении маршрута
   useEffect(() => {
-    if (pathname) {
-      ym("hit", pathname);
+    if (typeof window !== 'undefined' && pathname) {
+      console.log('Sending Yandex Metrika route hit:', pathname);
+      ym(YM_COUNTER_ID, "hit", window.location.href);
     }
   }, [pathname]);
 
@@ -20,11 +30,14 @@ const YandexMetrika = () => {
     <YMInitializer
       accounts={[YM_COUNTER_ID]}
       options={{
-        defer: true,
+        defer: false, // Отключаем defer для немедленной инициализации
         webvisor: true,
         clickmap: true,
         trackLinks: true,
         accurateTrackBounce: true,
+        childIframe: true,
+        ecommerce: false,
+        type: 1, // Тип счетчика: 1 - для обычных сайтов
       }}
       version="2"
     />
