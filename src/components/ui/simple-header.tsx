@@ -5,9 +5,12 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { MenuToggle } from '@/components/ui/menu-toggle';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
 
 export function SimpleHeader() {
 	const [open, setOpen] = React.useState(false);
+	const router = useRouter();
+	const pathname = usePathname();
 
 	const links = [
 		{
@@ -24,6 +27,26 @@ export function SimpleHeader() {
 		},
 	];
 
+	const handleLinkClick = (href: string) => {
+		if (href.startsWith('#')) {
+			// Если это якорь и мы не на главной странице
+			if (pathname !== '/') {
+				// Переходим на главную с якорем
+				router.push('/' + href);
+			} else {
+				// Если уже на главной, просто скроллим к якорю
+				const element = document.querySelector(href);
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth' });
+				}
+			}
+		} else {
+			// Обычная навигация
+			router.push(href);
+		}
+		setOpen(false);
+	};
+
 	return (
 		<header className="z-50 w-full bg-[#272727]/80 backdrop-blur-md fixed py-6 ">
 			<nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4">
@@ -38,13 +61,13 @@ export function SimpleHeader() {
 				<div className="hidden items-center gap-2 lg:flex">
 					{links.map((link) => (
 						<div key={link.href} className='w-full relative flex'>
-							<Link
+							<button
 								className={buttonVariants({ className: 'text-white text-xl font-onest-medium group relative w-max m-1 bg-transparent hover:bg-transparent' })}
-								href={link.href}
+								onClick={() => handleLinkClick(link.href)}
 							>
 								{link.label}
 								<span className='absolute -bottom-1 left-0 w-0 transition-all duration-300 ease-in-out h-0.5 bg-white group-hover:w-full'></span>
-							</Link>
+							</button>
 						</div>
 					))}
 				</div>
@@ -63,17 +86,16 @@ export function SimpleHeader() {
 					>
 						<div className="grid gap-y-2 overflow-y-auto px-4 pt-12 pb-5">
 							{links.map((link) => (
-								<Link
+								<button
 									key={link.href}
 									className={buttonVariants({
 										variant: 'ghost',
-										className: 'justify-start font-onest-medium',
+										className: 'justify-start font-onest-medium w-full text-left',
 									})}
-									href={link.href}
-									onClick={() => setOpen(false)}
+									onClick={() => handleLinkClick(link.href)}
 								>
 									{link.label}
-								</Link>
+								</button>
 							))}
 						</div>
 					</SheetContent>
