@@ -182,15 +182,5 @@ export const sidebarItems: SidebarItem[] = [
     title: "Главная",
     icon: <Home className="h-4 w-4" />,
     isActive: true,
-  },
-  {
-    title: "Я.Метрики",
-    icon: <Grid className="h-4 w-4" />,
-    items: [
-      { title: "All Apps", url: "#" },
-      { title: "Recent", url: "#" },
-      { title: "Updates", url: "#" },
-      { title: "Installed", url: "#" },
-    ],
   }
 ]

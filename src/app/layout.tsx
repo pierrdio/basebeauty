@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { headers } from "next/headers";
 import { Toaster } from "@/components/ui/sonner";
-import YandexMetrika from "@/components/YandexMetrika";
 
 
 const geistSans = Geist({
@@ -51,7 +50,6 @@ export default async function RootLayout({
         ) : (
           <main className="grow">
             {children}
-            <YandexMetrika />
           </main>
         )}
         <Toaster />

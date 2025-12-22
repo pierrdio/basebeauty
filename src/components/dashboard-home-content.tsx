@@ -89,7 +89,7 @@ export function HomeContent({ onTabChange, recentSubmissions = [], recentWorks =
             <div className="space-y-4">
               <h2 className="text-3xl font-bold">Добро пожаловать в панель управления!</h2>
               <p className="max-w-[600px] text-white/80">
-                Здесь вы можете добавлять новые работы в портфолио, отслеживать обращения, а так же просматривать Яндекс Метрики
+                Здесь вы можете добавлять новые работы в портфолио, отслеживать обращения
               </p>
             </div>
             <div className="hidden lg:block">

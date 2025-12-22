@@ -20,7 +20,6 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PhotoUpload } from "@/components/ui/photo-upload"
-import MetrikaStats from "@/components/MetrikaStats"
 import { toast } from "sonner"
 
 export default function Dashboard() {
@@ -166,7 +165,7 @@ export default function Dashboard() {
               className="w-full"
             >
               <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <TabsList className="grid w-full max-w-200 grid-cols-4 rounded-2xl p-1">
+                <TabsList className="grid w-full max-w-[600px] grid-cols-3 rounded-2xl p-1">
                   <TabsTrigger value="home" className="rounded-xl cursor-pointer">
                     Главная
                   </TabsTrigger>
@@ -175,9 +174,6 @@ export default function Dashboard() {
                   </TabsTrigger>
                   <TabsTrigger value="offers" className="rounded-xl cursor-pointer">
                     Обращения
-                  </TabsTrigger>
-                  <TabsTrigger value="analytics" className="rounded-xl cursor-pointer">
-                    Аналитика
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -275,9 +271,6 @@ export default function Dashboard() {
                       </div>
                       <DynamicTable data={contactSubmissions.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())} onDataChange={fetchContactSubmissions} tableTitle="Обращения" />
                     </div>
-                  </TabsContent>
-                  <TabsContent value="analytics" className="mt-0">
-                    <MetrikaStats />
                   </TabsContent>
                 </motion.div>
               </AnimatePresence>
