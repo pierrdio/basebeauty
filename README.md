@@ -1,58 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Base Beauty
 
-## Getting Started
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC)](https://tailwindcss.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-blue)](https://www.prisma.io/)
+[![NextUI](https://img.shields.io/badge/NextUI-blue)](https://nextui.org/)
+[![Shadcn](https://img.shields.io/badge/Shadcn-blue)](https://ui.shadcn.com/)
 
-First, run the development server:
+![Commits](https://img.shields.io/github/commit-activity/m/PierreDioJ/basebeauty)
+[![Last commit](https://img.shields.io/github/last-commit/PierreDioJ/basebeauty)](https://github.com/PierreDioJ/basebeauty/commits/main)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Эксклюзивное оформление мероприятий от компании «Base-Beauty» - это визитная карточка самого высокого уровня.
+
+## Содержание
+
+- [О проекте](#о-проекте)
+- [Технологии](#технологии)
+- [Требования к проекту](#требования-к-проекту)
+- [Установка и запуск](#установка-и-запуск)
+
+## О проекте
+
+Base Beauty - это современный веб-сайт для компании, специализирующейся на эксклюзивном оформлении мероприятий:
+- Массовые мероприятия
+- Телевизионные студии  
+- Концерты
+- Частные мероприятия
+- Выставочные пространства
+- МАФЫ (малоархитектурные формы)
+
+## Технологии
+
+- **Next.js 14** - React фреймворк с App Router
+- **TypeScript** - Типизация JavaScript
+- **Tailwind CSS** - Утилитарный CSS фреймворк
+- **Prisma** - ORM для работы с базой данных
+- **NextUI/Shadcn** - UI компоненты
+
+## Требования к проекту
+
+### Системные требования
+- **Node.js** 18.0 или выше
+- **npm** 8.0 или выше
+- **Git** для клонирования репозитория
+
+### Браузеры
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+### Переменные окружения
+Создайте файл [.env](cci:7://file:///Users/maksimyurt/Desktop/basebeauty/.env:0:0-0:0) в корне проекта:
+
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/my_db"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Установка и запуск
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Для локальной настройки проекта:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# basebeauty
-
-## Other Editors Configuration
-
-### Manual Figma MCP Server Configuration
-
-Other code editors and tools that support SSE (Server-Sent Events) can also connect to the Figma MCP server.
-
-1. **Check SSE Support**: Check your editor's documentation to confirm it supports SSE-based communication
-2. **Manual Configuration**: If it does, you can manually add the Figma MCP server using this configuration:
-
-```json
-{
-  "mcpServers": {
-    "Figma Desktop": {
-      "url": "http://127.0.0.1:3845/mcp"
-    }
-  }
-}
-```
-
-Add this configuration to your editor's MCP settings file or configuration panel.
+1. Клонируйте репозиторий:
+    ```bash
+    git clone https://github.com/{{github_username}}/{{github_repo_name}}.git
+    ```
+2. Установите зависимости:
+    ```bash
+    npm install
+    ```
+3. Запустите проект:
+    ```bash
+    npm start
+    ```
