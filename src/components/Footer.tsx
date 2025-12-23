@@ -60,7 +60,7 @@ export default function Footer() {
 
             <div className="flex flex-col lg:flex-row justify-center items-center text-lg text-gray-400 gap-4 lg:gap-10">
                 <span>© 1993-{getYear()} Все права защищены</span>
-                {/* <span className="hover:text-white cursor-pointer transition-colors">Политика конфиденциальности</span> */}
+                <Link className="hover:text-white cursor-pointer transition-colors" href="/privacy-policy">Политика конфиденциальности</Link>
             </div>
         </footer>
     )
