@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { headers } from "next/headers";
 import { Toaster } from "@/components/ui/sonner";
+import CookieConsent from "@/components/CookieConsent";
 
 
 const geistSans = Geist({
@@ -54,6 +55,7 @@ export default async function RootLayout({
         )}
         <Toaster />
         {!(isDashboard || isAdminLogin) && <Footer />}
+        {!(isDashboard || isAdminLogin) && <CookieConsent />}
       </body>
     </html>
   );
