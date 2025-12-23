@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ServiceBlockDesign({ title }: { title: string }) {
 
-    const services: (string | React.ReactNode)[] = ["Декораций", <>Выстовочных<br />стендов</>, <>Телевизионные<br />студии</>, "Полиграфии", "МАФОВ", <>Оформление<br />мероприятий</>];
+    const services: (string | React.ReactNode)[] = ["Декораций", <>Выставочных<br />стендов</>, <>Телевизионные<br />студии</>, "Полиграфии", "МАФОВ", <>Оформление<br />мероприятий</>];
 
     const isProduction = title === "ПРОИЗВОДСТВО";
 
