@@ -10,6 +10,7 @@ Disallow: /*.css$
 Disallow: /_error
 Disallow: /404
 Disallow: /500
+Disallow: /privacy-policy
 
 # Yandex specific directives
 User-agent: Yandex
@@ -24,6 +25,7 @@ Disallow: /*.css$
 Disallow: /_error
 Disallow: /404
 Disallow: /500
+Disallow: /privacy-policy
 Clean-param: utm_source&utm_medium&utm_campaign&ref&clid&from&yclid&openstat
 
 # Allow specific important pages

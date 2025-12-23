@@ -3,7 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://basebeauty.ru/</loc>
-    <lastmod>2025-12-22</lastmod>
+    <lastmod>2025-12-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,8 +11,24 @@
   <!-- Works listing page -->
   <url>
     <loc>https://basebeauty.ru/works</loc>
-    <lastmod>2025-12-22</lastmod>
+    <lastmod>2025-12-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  
+  <!-- Services page -->
+  <url>
+    <loc>https://basebeauty.ru/services</loc>
+    <lastmod>2025-12-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact page -->
+  <url>
+    <loc>https://basebeauty.ru/contact</loc>
+    <lastmod>2025-12-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
