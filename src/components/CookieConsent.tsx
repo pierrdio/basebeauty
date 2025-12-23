@@ -33,7 +33,7 @@ export default function CookieConsent() {
           </p>
           <p className="text-gray-400 text-xs sm:text-sm">
             Продолжая использовать сайт, вы соглашаетесь с нашей{' '}
-            <a href="/privacy" className="text-[#00D89F] hover:underline">
+            <a href="/privacy-policy" className="text-[#00D89F] hover:underline">
               политикой конфиденциальности
             </a>
           </p>
