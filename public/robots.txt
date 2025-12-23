@@ -1,0 +1,37 @@
+User-agent: *
+Disallow: /_next/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /.well-known/
+Disallow: /uploads/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /_error
+Disallow: /404
+Disallow: /500
+
+# Yandex specific directives
+User-agent: Yandex
+Disallow: /_next/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /.well-known/
+Disallow: /uploads/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /_error
+Disallow: /404
+Disallow: /500
+Clean-param: utm_source&utm_medium&utm_campaign&ref&clid&from&yclid&openstat
+
+# Allow specific important pages
+Allow: /
+Allow: /sitemap.xml
+
+# Sitemap location
+Sitemap: https://basebeauty.ru/sitemap.xml
+
+# Crawl-delay for Yandex (optional - remove if not needed)
+Crawl-delay: 1

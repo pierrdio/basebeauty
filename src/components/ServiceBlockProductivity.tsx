@@ -3,7 +3,7 @@ import ServiceBlockItem from "./ServiceBlockItem";
 
 export default function ServiceBlockProductivity({ title }: { title: string }) {
 
-    const services: (string | React.ReactNode)[] = [<>Массывые<br />мероприятия</>, <>Телевизионные<br />студии</>, <>Оформление<br />концертов</>, <>Частные<br />мероприятия</>, <>Оформление<br />выстовочных пространств</>, "МАФЫ"];
+    const services: (string | React.ReactNode)[] = [<>Массовые<br />мероприятия</>, <>Телевизионные<br />студии</>, <>Оформление<br />концертов</>, <>Частные<br />мероприятия</>, <>Оформление<br />выстовочных пространств</>, "МАФЫ"];
 
     return (
         <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-lg w-full">

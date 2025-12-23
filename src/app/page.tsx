@@ -9,7 +9,6 @@ import WorkMap from "@/components/WorkMap";
 
 export default function Home() {
   useEffect(() => {
-    // Обработка якорей при загрузке страницы
     const hash = window.location.hash;
     if (hash) {
       setTimeout(() => {

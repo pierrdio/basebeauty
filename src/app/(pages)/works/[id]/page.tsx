@@ -91,7 +91,7 @@ export default function WorkPage() {
         <main className="mx-auto flex w-full max-w-7xl px-4 flex-col gap-4 pt-30">
             <div className="max-w-xl flex-1 mb-10 w-fit p-px bg-linear-to-bl from-gray-500 via-gray-900 to-stone-200 rounded-4xl">
                 <div className="bg-black rounded-4xl p-4">
-                    <h1 className="text-6xl font-semibold text-[#00D89F] text-center w-full">{work.title}</h1>
+                    <h1 className="text-6xl max-sm:text-2xl font-semibold text-[#00D89F] text-center w-full">{work.title}</h1>
                 </div>
             </div>
             
