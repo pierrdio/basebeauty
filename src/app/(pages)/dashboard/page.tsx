@@ -165,7 +165,7 @@ export default function Dashboard() {
               className="w-full"
             >
               <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <TabsList className="grid w-full max-w-[600px] grid-cols-3 rounded-2xl p-1">
+                <TabsList className="grid w-full max-w-150 grid-cols-3 rounded-2xl p-1">
                   <TabsTrigger value="home" className="rounded-xl cursor-pointer">
                     Главная
                   </TabsTrigger>

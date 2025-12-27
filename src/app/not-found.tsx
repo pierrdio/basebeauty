@@ -5,11 +5,11 @@ import Footer from "@/components/Footer";
 export default function NotFound() {
     return (
         <div className="min-h-screen bg-[#222222] flex flex-col">
-            <main className="grow flex items-center justify-center px-4 pt-30">
+            <main className="grow flex items-center justify-center px-4 pt-30 font-onest-medium">
                 <div className="text-center max-w-2xl">
                     <div className="mb-8">
                         <h1 className="text-9xl font-bold text-[#00D89F] mb-4">404</h1>
-                        <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#00D89F] to-transparent mx-auto mb-8"></div>
+                        <div className="w-32 h-1 bg-linear-to-r from-transparent via-[#00D89F] to-transparent mx-auto mb-8"></div>
                     </div>
 
                     <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
@@ -36,7 +36,7 @@ export default function NotFound() {
                         </Link>
                     </div>
 
-                    <div className="mt-12 text-gray-500 text-sm">
+                    <div className="my-12 text-gray-500 text-sm">
                         Или вернитесь назад с помощью кнопки браузера
                     </div>
                 </div>

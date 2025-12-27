@@ -116,7 +116,7 @@ export default function PrivacyPolicyPage() {
                         предварительного уведомления Пользователя.</p>
                     <p>10.2. Новая редакция Политики вступает в силу с момента её размещения на Сайте.</p>
                     <p>10.3. Актуальная версия Политики конфиденциальности доступна по адресу:
-                        <Link href="/" className="text-blue-700 underline"> https://www.basebeauty.ru/</Link>
+                        <Link href="/privacy-policy" className="text-blue-700 underline"> https://www.basebeauty.ru/privacy-policy</Link>
                     </p>
                 </div>
             </div>

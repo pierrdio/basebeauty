@@ -23,11 +23,9 @@ export default function WorkMap() {
         return <div className="w-full h-screen bg-black"></div>;
     }
 
-    // Mobile layout - все сверху вниз
     if (isMobile) {
         return (
             <div className="relative left-1/2 -translate-x-1/2 w-screen py-8 bg-black overflow-hidden">
-                {/* Title */}
                 <div className="absolute top-2 left-4 z-20">
                     <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-xl">
                         <div className="bg-[#222] bg-opacity-70 rounded-xl px-3 py-1">
@@ -52,13 +50,10 @@ export default function WorkMap() {
                     />
                 </div>
 
-                {/* Mobile content - вертикальная компоновка с улучшенными стрелками */}
                 <div className="relative z-10 w-full p-4">
                     <div className="w-full max-w-md mx-auto space-y-6">
-                        {/* Принятие брифа */}
                         <WorkMapNode label="Принятие брифа" />
 
-                        {/* Стрелка вниз - улучшенная версия */}
                         <div className="flex justify-center">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#1DCD9F]">
                                 <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -123,10 +118,8 @@ export default function WorkMap() {
         );
     }
 
-    // Desktop layout - оригинальная сетка с уменьшенными стрелками
     return (
-        <div className="relative left-1/2 -translate-x-1/2 w-screen py-16 bg-black overflow-hidden">
-            {/* Title */}
+        <div className="relative left-1/2 -translate-x-1/2 w-screen py-20 bg-black overflow-hidden">
             <div className="absolute top-8 left-8 z-20">
                 <div className="p-px bg-linear-to-tl from-gray-500 via-gray-900 to-stone-200 rounded-xl">
                     <div className="bg-[#222] bg-opacity-70 rounded-xl px-6 py-2">
