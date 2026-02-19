@@ -183,12 +183,14 @@ export function HomeContent({ onTabChange, recentSubmissions = [], recentWorks =
                 <motion.div
                   key={work.id}
                   whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
-                  className="p-4"
+                  className="p-4 overflow-hidden"
                 >
                   <div className="mb-2 flex items-center justify-between">
-                    <h3 className="font-medium">{work.title}</h3>
+                    <h3 className="font-medium truncate pr-2" title={work.title}>
+                      {work.title}
+                    </h3>
                   </div>
-                  <p className="text-muted-foreground mb-3 text-sm line-clamp-2">
+                  <p className="text-muted-foreground mb-3 text-sm line-clamp-2 overflow-hidden">
                     {work.description || 'Нет описания'}
                   </p>
                   <div className="text-sm text-muted-foreground">

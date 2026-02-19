@@ -43,6 +43,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${onest.variable} font-tt-runs antialiased bg-[#222222] min-h-screen ${(isDashboard || isAdminLogin) ? "font-onest" : "flex flex-col"}`}
       >
         {!(isDashboard || isAdminLogin) && <Header />}

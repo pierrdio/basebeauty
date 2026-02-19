@@ -125,10 +125,12 @@ export function EditWorkDialog({ work, isOpen, onClose, onSave }: EditWorkDialog
           
           <div className="grid gap-2">
             <Label htmlFor="edit-description">Описание</Label>
-            <Input 
+            <textarea
               id="edit-description"
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              rows={4}
+              className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
             />
           </div>
           

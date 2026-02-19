@@ -21,11 +21,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PhotoUpload } from "@/components/ui/photo-upload"
 import { toast } from "sonner"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function Dashboard() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("home")
   const [works, setWorks] = useState<any[]>([])
+  const [news, setNews] = useState<any[]>([])
   const [contactSubmissions, setContactSubmissions] = useState<any[]>([])
+  const [videos, setVideos] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
@@ -34,14 +39,26 @@ export default function Dashboard() {
     photos: [] as File[]
   })
 
+  const [videoFormData, setVideoFormData] = useState({
+    title: "",
+    description: "",
+    videos: [] as File[]
+  })
+
   useEffect(() => {
     fetchWorks()
+    fetchNews()
     fetchContactSubmissions()
+    fetchVideos()
   }, [])
 
   useEffect(() => {
     if (activeTab === "works") {
       fetchWorks()
+    } else if (activeTab === "news") {
+      fetchNews()
+    } else if (activeTab === "videos") {
+      fetchVideos()
     }
   }, [activeTab])
 
@@ -51,14 +68,22 @@ export default function Dashboard() {
       const response = await fetch('/api/works')
       if (response.ok) {
         const data = await response.json()
-        console.log('Dashboard - Raw works data:', data)
-        console.log('Dashboard - First work structure:', data[0])
         setWorks(data)
       }
-    } catch (error) {
-      console.error('Error fetching works:', error)
+    } catch {
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchNews = async () => {
+    try {
+      const response = await fetch('/api/news')
+      if (response.ok) {
+        const data = await response.json()
+        setNews(data)
+      }
+    } catch {
     }
   }
 
@@ -69,8 +94,21 @@ export default function Dashboard() {
         const data = await response.json()
         setContactSubmissions(data)
       }
-    } catch (error) {
-      console.error('Error fetching contact submissions:', error)
+    } catch {
+    }
+  }
+
+  const fetchVideos = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/videos')
+      if (response.ok) {
+        const data = await response.json()
+        setVideos(data)
+      }
+    } catch {
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -101,8 +139,7 @@ export default function Dashboard() {
       })
 
       if (response.ok) {
-        const result = await response.json()
-        console.log('Work added successfully:', result)
+        await response.json()
         // Reset form
         setFormData({ title: '', description: '', photos: [] })
         // Refresh works list
@@ -113,8 +150,49 @@ export default function Dashboard() {
         const error = await response.json()
         toast.error(`Ошибка: ${error.error || 'Не удалось добавить работу'}`)
       }
-    } catch (error) {
-      console.error('Error submitting work:', error)
+    } catch {
+      toast.error('Произошла ошибка при отправке формы')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleVideoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!videoFormData.title.trim()) {
+      toast.error('Пожалуйста, введите название видео')
+      return
+    }
+
+    if (!videoFormData.videos.length) {
+      toast.error('Пожалуйста, выберите видео файл')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const formDataToSend = new FormData()
+      formDataToSend.append('title', videoFormData.title)
+      formDataToSend.append('description', videoFormData.description)
+      formDataToSend.append('video', videoFormData.videos[0])
+
+      const response = await fetch('/api/videos/add', {
+        method: 'POST',
+        body: formDataToSend
+      })
+
+      if (response.ok) {
+        await response.json()
+        // Reset form
+        setVideoFormData({ title: '', description: '', videos: [] })
+        // Refresh videos list
+        fetchVideos()
+        toast.success('Видео успешно добавлено!')
+      } else {
+        const error = await response.json()
+        toast.error(`Ошибка: ${error.error || 'Не удалось добавить видео'}`)
+      }
+    } catch {
       toast.error('Произошла ошибка при отправке формы')
     } finally {
       setIsSubmitting(false)
@@ -165,7 +243,7 @@ export default function Dashboard() {
               className="w-full"
             >
               <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <TabsList className="grid w-full max-w-150 grid-cols-3 rounded-2xl p-1">
+                <TabsList className="grid w-full max-w-150 grid-cols-5 rounded-2xl p-1">
                   <TabsTrigger value="home" className="rounded-xl cursor-pointer">
                     Главная
                   </TabsTrigger>
@@ -174,6 +252,12 @@ export default function Dashboard() {
                   </TabsTrigger>
                   <TabsTrigger value="offers" className="rounded-xl cursor-pointer">
                     Обращения
+                  </TabsTrigger>
+                  <TabsTrigger value="news" className="rounded-xl cursor-pointer">
+                    Новости
+                  </TabsTrigger>
+                  <TabsTrigger value="videos" className="rounded-xl cursor-pointer">
+                    Видео
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -227,12 +311,13 @@ export default function Dashboard() {
                                   </div>
                                   <div className="grid gap-3">
                                     <Label htmlFor="sheet-desc">Описание</Label>
-                                    <Input
+                                    <textarea
                                       id="sheet-desc"
                                       name="description"
-                                      type="text"
                                       value={formData.description}
                                       onChange={handleInputChange}
+                                      rows={4}
+                                      className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
                                     />
                                   </div>
                                   <div className="grid gap-3">
@@ -257,7 +342,7 @@ export default function Dashboard() {
                           </Button>
                         </div>
                       </div>
-                      <DynamicTable data={works.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())} onDataChange={fetchWorks} tableTitle="Работы"/>
+                      <DynamicTable data={works.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())} onDataChange={fetchWorks} tableTitle="Работы" />
                     </div>
                   </TabsContent>
                   <TabsContent value="offers" className="mt-0">
@@ -270,6 +355,101 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <DynamicTable data={contactSubmissions.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())} onDataChange={fetchContactSubmissions} tableTitle="Обращения" />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="news" className="mt-0">
+                    <div className="p-5 rounded-3xl border border-dashed">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="hidden gap-2 md:flex">
+                          <Button className="rounded-2xl">
+                            <div className="flex items-center gap-2">
+                              <Plus className="mr-2 h-4 w-4" />
+                              <Link href="/dashboard/add-news" className="text-white hover:underline-offset-6">Добавить новость</Link>
+                            </div>
+                          </Button>
+                        </div>
+                      </div>
+                      <DynamicTable
+                        data={news.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}
+                        onDataChange={fetchNews}
+                        tableTitle="Новости"
+                        apiBasePath="/api/news"
+                        onEditItem={(item) => router.push(`/dashboard/add-news?id=${item.id}`)}
+                        viewPath="/news"
+                      />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="videos" className="mt-0">
+                    <div className="p-5 rounded-3xl border border-dashed">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="hidden gap-2 md:flex">
+                          <Button className="rounded-2xl">
+                            <Sheet>
+                              <SheetTrigger asChild>
+                                <div className="flex items-center gap-2">
+                                  <Plus className="mr-2 h-4 w-4" />
+                                  <Button variant="link" className="text-white hover:underline-offset-6">Добавить видео</Button>
+                                </div>
+                              </SheetTrigger>
+                              <SheetContent className="font-onest overflow-auto">
+                                <SheetHeader>
+                                  <SheetTitle>Добавить видео</SheetTitle>
+                                  <SheetDescription>
+                                    Внесите данные для добавления в форму ниже. После завершения нажмите «Сохранить».
+                                  </SheetDescription>
+                                </SheetHeader>
+                                <form onSubmit={handleVideoSubmit} className="grid flex-1 auto-rows-min gap-6 px-4">
+                                  <div className="grid gap-3">
+                                    <Label htmlFor="video-title">Название</Label>
+                                    <Input
+                                      id="video-title"
+                                      name="title"
+                                      type="text"
+                                      value={videoFormData.title}
+                                      onChange={(e) => setVideoFormData(prev => ({ ...prev, title: e.target.value }))}
+                                      required
+                                    />
+                                  </div>
+                                  <div className="grid gap-3">
+                                    <Label htmlFor="video-desc">Описание</Label>
+                                    <textarea
+                                      id="video-desc"
+                                      name="description"
+                                      value={videoFormData.description}
+                                      onChange={(e) => setVideoFormData(prev => ({ ...prev, description: e.target.value }))}
+                                      rows={4}
+                                      className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
+                                    />
+                                  </div>
+                                  <div className="grid gap-3">
+                                    <Label htmlFor="video-file">Видео файл</Label>
+                                    <PhotoUpload
+                                      value={videoFormData.videos}
+                                      onChange={(files) => setVideoFormData(prev => ({ ...prev, videos: files }))}
+                                      maxFiles={1}
+                                      accept="video/*"
+                                    />
+                                  </div>
+                                </form>
+                                <SheetFooter>
+                                  <Button type="submit" disabled={isSubmitting} onClick={handleVideoSubmit}>
+                                    {isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                                  </Button>
+                                  <SheetClose asChild>
+                                    <Button variant="outline">Закрыть</Button>
+                                  </SheetClose>
+                                </SheetFooter>
+                              </SheetContent>
+                            </Sheet>
+                          </Button>
+                        </div>
+                      </div>
+                      <DynamicTable
+                        data={videos.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}
+                        onDataChange={fetchVideos}
+                        tableTitle="Видео"
+                        apiBasePath="/api/videos"
+                      />
                     </div>
                   </TabsContent>
                 </motion.div>

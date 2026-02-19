@@ -21,13 +21,9 @@ export default function Portfolio() {
             try {
                 const res = await fetch('/api/works');
                 const data = await res.json();
-                console.log('Portfolio - Raw works data:', data);
-                console.log('Portfolio - First work structure:', data[0]);
-                // Sort by ID descending to show latest works first
                 const sortedWorks = data.sort((a: Work, b: Work) => b.id - a.id);
                 setWorks(sortedWorks);
-            } catch (error) {
-                console.error('Portfolio - Error fetching works:', error);
+            } catch {
             } finally {
                 setIsLoading(false);
             }
@@ -37,24 +33,19 @@ export default function Portfolio() {
 
     // Helper function to get photo URL
     const getPhotoUrl = (work: Work) => {
-        console.log(`Portfolio - Getting photo for work ${work.id}:`, work);
         try {
             const photos = JSON.parse(work.photos || '[]');
-            console.log(`Portfolio - Parsed photos for work ${work.id}:`, photos);
             if (photos.length > 0) {
                 if (typeof photos[0] === 'string') {
-                    console.log(`Portfolio - Using string URL:`, photos[0]);
                     return photos[0];
                 } else if (photos[0].fileUrl) {
-                    console.log(`Portfolio - Using object fileUrl:`, photos[0].fileUrl);
                     return photos[0].fileUrl;
                 }
             }
-        } catch (error) {
-            console.error(`Portfolio - Error parsing photos for work ${work.id}:`, error, 'Raw photos:', work.photos);
+        } catch {
+            // ignore
         }
-        console.log(`Portfolio - Using fallback image for work ${work.id}`);
-        return '/img1.webp'; // fallback
+        return '/img1.webp';
     };
 
     // Helper function to truncate title

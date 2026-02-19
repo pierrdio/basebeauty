@@ -70,6 +70,7 @@ export function SimplePhotoPreview({ photos, initialIndex = 0, isOpen, onClose }
       tabIndex={0}
     >
       {/* Кнопка закрытия */}
+      123213
       <button
         className={`absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-all duration-300 transform ${
           isAnimating ? 'scale-100 opacity-100' : 'scale-75 opacity-0'

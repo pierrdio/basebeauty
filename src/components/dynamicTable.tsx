@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import { PhotoPreview } from "@/components/ui/photo-preview";
 import { EditWorkDialog } from "@/components/ui/edit-work-dialog";
+import { EditVideoDialog } from "@/components/ui/edit-video-dialog";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -51,7 +52,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { ArrowUp, ArrowDown, ChevronsUpDown, Trash2, Pencil, Eye } from "lucide-react";
+import { ArrowUp, ArrowDown, ChevronsUpDown, Trash2, Pencil, Eye, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 const badgeColors = [
   "bg-blue-100 text-blue-700",
@@ -86,9 +88,12 @@ interface DynamicTableProps {
   onDataChange?: () => void;
   hideActions?: boolean;
   tableTitle?: string;
+  apiBasePath?: string;
+  onEditItem?: (item: any) => void;
+  viewPath?: string;
 }
 
-export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, hideActions, tableTitle }) => {
+export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, hideActions, tableTitle, apiBasePath = "/api/works", onEditItem, viewPath }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -97,8 +102,11 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<any>(null);
+  const [editVideoDialogOpen, setEditVideoDialogOpen] = useState(false);
+  const [videoToEdit, setVideoToEdit] = useState<any>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [itemToView, setItemToView] = useState<any>(null);
+  const [videoPreview, setVideoPreview] = useState<any>(null);
 
   const handleStatusChange = async (submissionId: string, newStatus: string) => {
     try {
@@ -119,15 +127,12 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
       } else {
         throw new Error('Failed to update status')
       }
-    } catch (error) {
-      console.error('Status update error:', error);
+    } catch {
       toast.error('Произошла ошибка при обновлении статуса');
     }
   }
 
   async function handleDelete(id: any) {
-    console.log('handleDelete called with id:', id, 'type:', typeof id);
-    console.log('handleDelete - full id object:', JSON.stringify(id));
     setItemToDelete(id);
     setDeleteDialogOpen(true);
   }
@@ -138,20 +143,27 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
   }
 
   async function handleEdit(item: any) {
-    setItemToEdit(item);
-    setEditDialogOpen(true);
+    if (onEditItem) {
+      onEditItem(item);
+      return;
+    }
+    if (item.hasOwnProperty('videoUrl')) {
+      setVideoToEdit(item);
+      setEditVideoDialogOpen(true);
+    } else {
+      setItemToEdit(item);
+      setEditDialogOpen(true);
+    }
   }
 
   async function confirmDelete() {
     if (!itemToDelete) return;
 
-    console.log('confirmDelete called with itemToDelete:', itemToDelete, 'type:', typeof itemToDelete);
-
     try {
-      const response = await fetch(`/api/works/${itemToDelete}`, { method: 'DELETE' });
-      
+      const response = await fetch(`${apiBasePath}/${itemToDelete}`, { method: 'DELETE' });
+
       if (response.ok) {
-        toast.success('Работа успешно удалена');
+        toast.success('Запись успешно удалена');
         // Refresh data
         if (onDataChange) {
           onDataChange();
@@ -160,9 +172,8 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
         const error = await response.json();
         toast.error(`Ошибка при удалении: ${error.error || 'Неизвестная ошибка'}`);
       }
-    } catch (error) {
-      console.error('Delete error:', error);
-      toast.error('Произошла ошибка при удалении работы');
+    } catch {
+      toast.error('Произошла ошибка при удалении');
     } finally {
       setDeleteDialogOpen(false);
       setItemToDelete(null);
@@ -183,7 +194,9 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
     const filteredKeys = keys.filter(key => {
       // Скрываем эти поля для всех типов данных
       if (hideActions && key === 'fileName') return false;
-      if (key === 'updatedAt') return false; // Убираем столбец "Обновлено" для всех типов данных
+      if (key === 'updatedAt') return false;
+      if (key === 'blocks') return false;
+      if (key === 'videoUrl') return false;
       
       // Скрываем эти поля только для contact submissions (которые есть поле phone)
       if (data[0]?.hasOwnProperty('phone')) {
@@ -209,6 +222,8 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
       if (col === 'fileName') headerName = 'Имя файла';
       if (col === 'status') headerName = 'Статус';
       if (col === 'description') headerName = 'Описание';
+      if (col === 'cover') headerName = 'Обложка';
+      if (col === 'blocks') headerName = 'Контент';
       if (col === 'createdAt') headerName = 'Создано';
       if (col === 'updatedAt') headerName = 'Обновлено';
 
@@ -391,6 +406,32 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
             return <span className="text-gray-400 text-xs">-</span>;
           }
 
+          // Handle cover image/video
+          if (col === 'cover') {
+            if (value && typeof value === 'string') {
+              return (
+                <img
+                  src={value}
+                  alt="Обложка"
+                  className="w-10 h-10 rounded object-cover border border-gray-200"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              );
+            }
+            return <span className="text-gray-400 text-xs">Нет</span>;
+          }
+
+          // Handle blocks JSON - show count
+          if (col === 'blocks' && typeof value === 'string') {
+            try {
+              const blocks = JSON.parse(value);
+              if (Array.isArray(blocks)) {
+                return <span className="text-gray-600 text-xs">{blocks.length} блок(ов)</span>;
+              }
+            } catch {}
+            return <span className="text-gray-400 text-xs">-</span>;
+          }
+
           // Handle photos JSON array
           if (col === 'photos' && typeof value === 'string') {
             try {
@@ -521,6 +562,29 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
             )}
             {!hideActions && !isContactSubmission && (
               <div className="flex gap-1">
+                {viewPath && (
+                  <Link href={`${viewPath}/${rowData.id}`} target="_blank">
+                    <Button
+                      size={"sm"}
+                      variant="outline"
+                      className="size-8 rounded-md p-0"
+                      title="Открыть"
+                    >
+                      <ExternalLink className="size-4" />
+                    </Button>
+                  </Link>
+                )}
+                {rowData.hasOwnProperty('videoUrl') && (
+                  <Button
+                    size={"sm"}
+                    variant="outline"
+                    className="size-8 rounded-md p-0"
+                    onClick={() => setVideoPreview(rowData)}
+                    title="Предпросмотр"
+                  >
+                    <Eye className="size-4" />
+                  </Button>
+                )}
                 <Button
                   size={"sm"}
                   variant="default"
@@ -648,13 +712,13 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
           </div>
 
           {/* Table */}
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-            <Table className="w-full min-w-275 md:min-w-600 text-sm md:table-fixed">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-x-auto">
+            <Table className="w-full text-sm">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="bg-gray-50 dark:bg-white/5">
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} className={`cursor-pointer select-none px-3 py-2 text-sm font-medium whitespace-nowrap ${header.column.id === 'id' ? 'w-10' : header.column.id === 'photos' ? 'w-10' : header.column.id === 'createdAt' ? 'w-10' : header.column.id === 'name' ? 'w-10' : header.column.id === 'phone' ? 'w-10' : header.column.id === 'message' ? 'w-20' : header.column.id === 'status' ? 'w-15' : header.column.id === 'title' ? 'w-20' : header.column.id === 'description' ? 'w-20' : header.column.id === 'action' ? 'w-15' : ''}`}>
+                      <TableHead key={header.id} className="cursor-pointer select-none px-3 py-2 text-sm font-medium whitespace-nowrap">
                         {header.isPlaceholder ? null : (
                           <Button
                             className="flex items-center gap-1 px-1 bg-transparent hover:bg-transparent text-gray-700 dark:text-gray-300 font-semibold text-sm h-auto py-1"
@@ -681,7 +745,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
                   table.getRowModel().rows.map((row) => (
                     <TableRow key={row.original.id} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/10">
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} className={`px-3 py-2 text-gray-700 dark:text-gray-300 whitespace-nowrap ${cell.column.id === 'id' ? 'w-20' : cell.column.id === 'photos' ? 'w-10' : cell.column.id === 'createdAt' ? 'w-10' : cell.column.id === 'name' ? 'w-10' : cell.column.id === 'phone' ? 'w-10' : cell.column.id === 'message' ? 'w-20' : cell.column.id === 'status' ? 'w-15' : cell.column.id === 'title' ? 'w-20' : cell.column.id === 'description' ? 'w-20' : cell.column.id === 'action' ? 'w-32' : ''}`}>
+                        <TableCell key={cell.id} className="px-3 py-2 text-gray-700 dark:text-gray-300">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}
@@ -744,7 +808,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
           <AlertDialogHeader>
             <AlertDialogTitle>Подтвердите удаление</AlertDialogTitle>
             <AlertDialogDescription>
-              Вы уверены, что хотите удалить эту работу? Это действие нельзя будет отменить.
+              Вы уверены, что хотите удалить эту запись? Это действие нельзя будет отменить.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -882,6 +946,36 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
           }
         }}
       />
+
+      {/* Edit Video Dialog */}
+      <EditVideoDialog
+        video={videoToEdit}
+        isOpen={editVideoDialogOpen}
+        onClose={() => setEditVideoDialogOpen(false)}
+        onSave={() => {
+          if (onDataChange) {
+            onDataChange();
+          }
+        }}
+      />
+
+      {/* Video Preview Dialog */}
+      <Dialog open={!!videoPreview} onOpenChange={() => setVideoPreview(null)}>
+        <DialogContent className="sm:max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="truncate pr-6 max-w-full" title={videoPreview?.title}>
+              {videoPreview?.title}
+            </DialogTitle>
+          </DialogHeader>
+          {videoPreview?.videoUrl && (
+            <video
+              src={videoPreview.videoUrl}
+              controls
+              className="w-full rounded-lg max-h-[70vh]"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

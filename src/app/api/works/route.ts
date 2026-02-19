@@ -9,7 +9,7 @@ export async function GET() {
 
         return NextResponse.json(works, { status: 200 });
     } catch (error) {
-        console.error('Ошибка в API /works:', error);
+        void error;
         return NextResponse.json({ error: 'Не удалось загрузить работы' }, { status: 500 });
     }
 }

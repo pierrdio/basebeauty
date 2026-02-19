@@ -9,25 +9,42 @@ interface PhotoUploadProps {
   value: File[]
   onChange: (files: File[]) => void
   maxFiles?: number
+  accept?: string
 }
 
-export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
+export function PhotoUpload({ value, onChange, maxFiles, accept }: PhotoUploadProps) {
   const [previewUrls, setPreviewUrls] = useState<string[]>([])
 
+  const getAcceptObject = () => {
+    if (accept) {
+      return accept.split(',').reduce((acc, type) => {
+        const trimmed = type.trim()
+        if (trimmed.includes('/')) {
+          acc[trimmed] = []
+        }
+        return acc
+      }, {} as Record<string, string[]>)
+    }
+    return {
+      'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+    }
+  }
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = [...value, ...acceptedFiles]
+    let newFiles = [...value, ...acceptedFiles]
+    if (maxFiles && newFiles.length > maxFiles) {
+      newFiles = newFiles.slice(0, maxFiles)
+    }
     onChange(newFiles)
     
     const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file))
     setPreviewUrls(prev => [...prev, ...newPreviews])
-  }, [value, onChange])
+  }, [value, onChange, maxFiles])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
-    },
-    multiple: true
+    accept: getAcceptObject(),
+    multiple: !maxFiles || maxFiles > 1
   })
 
   const removeFile = (index: number) => {
@@ -60,9 +77,12 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
               <p>Отпустите файлы здесь...</p>
             ) : (
               <div>
-                <p className="font-medium">Перетащите фотографии сюда или нажмите для выбора</p>
+                <p className="font-medium">Перетащите файлы сюда или нажмите для выбора</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Можно выбрать несколько файлов. Поддерживаются JPG, PNG, GIF, WebP, SVG
+                  {accept?.includes('video') 
+                    ? 'Поддерживаются видео файлы'
+                    : 'Поддерживаются JPG, PNG, GIF, WebP, SVG'
+                  }
                 </p>
               </div>
             )}
@@ -73,7 +93,10 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
       {value.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Выбранные фотографии ({value.length}):</p>
+            <p className="text-sm font-medium">
+              Выбранные файлы ({value.length}):
+              {maxFiles && maxFiles > 1 ? ` (макс. ${maxFiles})` : ''}
+            </p>
             {value.length > 0 && (
               <Button
                 variant="outline"
@@ -92,11 +115,23 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
               <div key={index} className="relative group">
                 <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border">
                   {previewUrls[index] ? (
-                    <img
-                      src={previewUrls[index]}
-                      alt={file.name}
-                      className="w-full h-full object-cover"
-                    />
+                    file.type.startsWith('image/') ? (
+                      <img
+                        src={previewUrls[index]}
+                        alt={file.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : file.type.startsWith('video/') ? (
+                      <video
+                        src={previewUrls[index]}
+                        className="w-full h-full object-cover"
+                        muted
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="h-8 w-8 text-gray-400" />
+                      </div>
+                    )
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <ImageIcon className="h-8 w-8 text-gray-400" />
