@@ -186,7 +186,7 @@ export default function NewsSection() {
                         <div className="flex items-start">
                             <div className="p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl h-fit">
                                 <div className="bg-black rounded-xl px-6 py-2.5">
-                                    <h3 className="text-[#1DCD9F] text-2xl font-bold wrap-break-word">{current.title}</h3>
+                                    <h3 className="text-[#1DCD9F] text-2xl font-bold wrap-break-word">{current.title.length > 25 ? current.title.slice(0, 25) + '...' : current.title}</h3>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +252,7 @@ export default function NewsSection() {
                                     <div className="flex flex-col gap-4 py-4">
                                         {/* Telegram */}
                                         <a
-                                            href="https://t.me/your_telegram"
+                                            href="https://t.me/basebeauty_decor"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="group"
@@ -273,22 +273,22 @@ export default function NewsSection() {
                                             </div>
                                         </a>
 
-                                        {/* VK */}
+                                        {/* Instagram */}
                                         <a
-                                            href="https://vk.com/your_vk"
+                                            href="https://www.instagram.com/base_beauty_decor?igsh=cW1nbW9rZ2ZjYWJw"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="group"
                                         >
                                             <div className="p-px bg-gradient-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl hover:from-[#1DCD9F] hover:via-[#1DCD9F]/50 hover:to-[#1DCD9F]/30 transition-all duration-300">
                                                 <div className="bg-[#111111] rounded-xl p-4 flex items-center gap-4 group-hover:bg-[#151515] transition-all">
-                                                    <div className="w-12 h-12 rounded-full bg-[#0077FF] flex items-center justify-center shrink-0">
+                                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] flex items-center justify-center shrink-0">
                                                         <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.15 14.41h-1.41c-.58 0-.76-.47-1.8-1.51-.91-.88-1.31-1-1.53-1-.32 0-.41.09-.41.53v1.38c0 .37-.12.59-1.09.59-1.6 0-3.38-.97-4.63-2.78-1.89-2.58-2.4-4.53-2.4-4.93 0-.22.09-.42.53-.42h1.41c.4 0 .55.18.7.61.78 2.15 2.09 4.03 2.63 4.03.2 0 .29-.09.29-.61v-2.37c-.06-1.12-.65-1.22-.65-1.62 0-.18.15-.36.38-.36h2.22c.33 0 .45.18.45.58v3.2c0 .33.15.45.24.45.2 0 .36-.12.73-.49 1.13-1.27 1.94-3.23 1.94-3.23.11-.22.28-.42.7-.42h1.41c.42 0 .51.22.42.58-.16.85-1.78 3.46-1.78 3.46-.17.27-.23.39 0 .7.17.23.73.71 1.1 1.14.67.77 1.18 1.41 1.32 1.86.13.44-.08.67-.51.67z" />
+                                                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                                                         </svg>
                                                     </div>
                                                     <div className="flex-1 font-onest">
-                                                        <h4 className="text-white font-semibold text-lg">ВКонтакте</h4>
+                                                        <h4 className="text-white font-semibold text-lg">Instagram</h4>
                                                         <p className="text-white/60 text-sm">Наше сообщество</p>
                                                     </div>
                                                     <ArrowRight className="w-5 h-5 text-[#1DCD9F] group-hover:translate-x-1 transition-transform" />

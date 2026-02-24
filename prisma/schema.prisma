@@ -39,6 +39,7 @@ model News {
   blocks    String   @default("[]") // JSON array of content blocks
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  videos    Video[]
 
   @@map("news")
 }
@@ -62,6 +63,8 @@ model Video {
   title       String
   description String   @default("")
   videoUrl    String   // URL to video file
+  newsId      Int?
+  news        News?    @relation(fields: [newsId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

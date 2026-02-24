@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
             coverUrl = await uploadFile(cover, uploadDir);
         }
 
-        // Process block images
+        // Process block images and carousel images
         let blocks = JSON.parse(blocksRaw);
         for (const block of blocks) {
             if (block.type === "image") {
@@ -73,6 +73,31 @@ export async function POST(request: NextRequest) {
                     if (blockFile.size > MAX_IMAGE_SIZE) continue;
                     block.content = await uploadFile(blockFile, uploadDir);
                 }
+            } else if (block.type === "carousel") {
+                // Process carousel images - collect all files for this block
+                const carouselImages: string[] = [];
+                let imageIndex = 0;
+                while (true) {
+                    const carouselFile = formData.get(`carousel-image-${block.id}-${imageIndex}`) as File | null;
+                    if (!carouselFile || typeof carouselFile.arrayBuffer !== "function") break;
+
+                    const ext = extname(carouselFile.name).toLowerCase();
+                    if (!ALLOWED_IMAGE_EXTS.includes(ext)) {
+                        imageIndex++;
+                        continue;
+                    }
+                    if (carouselFile.size > MAX_IMAGE_SIZE) {
+                        imageIndex++;
+                        continue;
+                    }
+
+                    const imageUrl = await uploadFile(carouselFile, uploadDir);
+                    carouselImages.push(imageUrl);
+                    imageIndex++;
+                }
+
+                // Store carousel images as JSON array
+                block.content = JSON.stringify(carouselImages);
             }
         }
 

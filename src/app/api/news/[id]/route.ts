@@ -102,7 +102,7 @@ export async function PUT(
             coverUrl = await uploadFile(cover, uploadDir);
         }
 
-        // Process block images
+        // Process block images and carousel images
         let blocks = JSON.parse(blocksRaw || existing.blocks);
         for (const block of blocks) {
             if (block.type === "image") {
@@ -113,6 +113,37 @@ export async function PUT(
                     if (blockFile.size > MAX_IMAGE_SIZE) continue;
                     block.content = await uploadFile(blockFile, uploadDir);
                 }
+            } else if (block.type === "carousel") {
+                // Keep existing carousel URLs from block content
+                let existingUrls: string[] = [];
+                try {
+                    const parsed = JSON.parse(block.content || "[]");
+                    existingUrls = parsed.filter((url: string) => typeof url === "string" && url.startsWith("/api/uploads/"));
+                } catch {}
+
+                // Process new carousel images
+                const newImages: string[] = [];
+                let imageIndex = 0;
+                while (true) {
+                    const carouselFile = formData.get(`carousel-image-${block.id}-${imageIndex}`) as File | null;
+                    if (!carouselFile || typeof carouselFile.arrayBuffer !== "function") break;
+
+                    const ext = extname(carouselFile.name).toLowerCase();
+                    if (!ALLOWED_IMAGE_EXTS.includes(ext)) {
+                        imageIndex++;
+                        continue;
+                    }
+                    if (carouselFile.size > MAX_IMAGE_SIZE) {
+                        imageIndex++;
+                        continue;
+                    }
+
+                    const imageUrl = await uploadFile(carouselFile, uploadDir);
+                    newImages.push(imageUrl);
+                    imageIndex++;
+                }
+
+                block.content = JSON.stringify([...existingUrls, ...newImages]);
             }
         }
 

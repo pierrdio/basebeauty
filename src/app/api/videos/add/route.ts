@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
         const title = String(formData.get('title') || '');
         const description = String(formData.get('description') || '');
         const video = formData.get('video') as File;
+        const newsIdRaw = formData.get('newsId');
+        const newsId = newsIdRaw ? Number(newsIdRaw) : null;
 
         if (!title.trim()) {
             return NextResponse.json({ error: 'Название обязательно' }, { status: 400 });
@@ -45,6 +47,7 @@ export async function POST(request: NextRequest) {
                 title,
                 description,
                 videoUrl,
+                ...(newsId && !isNaN(newsId) ? { newsId } : {}),
             },
         });
 

@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import Link from "next/link"
 
 interface Video {
     id: number
     title: string
     description: string
     videoUrl: string
+    news?: { id: number; title: string } | null
 }
 
 function formatTime(seconds: number) {
@@ -32,23 +34,23 @@ function useCarouselSizes() {
             if (w < 640) {
                 // Мобильные устройства
                 const cw = Math.min(w * 0.75, 280)
-                setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 16, containerHeight: cw * 1.55, centerHeight: cw * 1.15, sideHeight: cw, showSides: false })
+                setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 16, containerHeight: cw * 1.8, centerHeight: cw * 1.53, sideHeight: cw, showSides: false })
             } else if (w < 800) {
                 // Маленькие планшеты
                 const cw = Math.min(w * 0.32, 300)
-                setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 30, containerHeight: cw * 1.65, centerHeight: cw * 1.25, sideHeight: cw * 1.1, showSides: false })
+                setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 30, containerHeight: cw * 1.85, centerHeight: cw * 1.53, sideHeight: cw * 1.3, showSides: false })
             } else if (w < 1024) {
                 // Большие планшеты - с маленькими боковыми видео
-                setSizes({ cardWidth: 180, centerWidth: 260, gap: 50, containerHeight: 480, centerHeight: 360, sideHeight: 320, showSides: true })
+                setSizes({ cardWidth: 180, centerWidth: 260, gap: 50, containerHeight: 480, centerHeight: 398, sideHeight: 275, showSides: true })
             } else if (w < 1280) {
                 // Маленький десктоп (1024-1280px) - компактные размеры
-                setSizes({ cardWidth: 260, centerWidth: 360, gap: 60, containerHeight: 680, centerHeight: 480, sideHeight: 460, showSides: true })
+                setSizes({ cardWidth: 260, centerWidth: 360, gap: 60, containerHeight: 650, centerHeight: 550, sideHeight: 398, showSides: true })
             } else if (w < 1536) {
                 // Средний десктоп (1280-1536px) - средние размеры
-                setSizes({ cardWidth: 340, centerWidth: 450, gap: 80, containerHeight: 800, centerHeight: 580, sideHeight: 560, showSides: true })
+                setSizes({ cardWidth: 340, centerWidth: 450, gap: 80, containerHeight: 780, centerHeight: 688, sideHeight: 520, showSides: true })
             } else {
                 // Большой десктоп (>1536px) - максимальные размеры
-                setSizes({ cardWidth: 380, centerWidth: 520, gap: 100, containerHeight: 900, centerHeight: 720, sideHeight: 640, showSides: true })
+                setSizes({ cardWidth: 380, centerWidth: 520, gap: 100, containerHeight: 900, centerHeight: 795, sideHeight: 581, showSides: true })
             }
         }
         update()
@@ -201,8 +203,8 @@ export default function VideoSection() {
             <section className="relative w-full pt-20">
                 <div className="relative w-full overflow-hidden">
                     {/* Side fades */}
-                    <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-40 lg:w-80 z-20 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(25,25,25,0.35) 0%, rgba(25,25,25,0.1) 60%, transparent 100%)" }} />
-                    <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-40 lg:w-80 z-20 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(25,25,25,0.35) 0%, rgba(25,25,25,0.1) 60%, transparent 100%)" }} />
+                    <div className="absolute left-0 top-0 bottom-0 w-[38%] z-20 pointer-events-none" style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)", background: "linear-gradient(to right, #222222 0%, rgba(34,34,34,0.7) 30%, rgba(34,34,34,0.2) 60%, transparent 100%)" }} />
+                    <div className="absolute right-0 top-0 bottom-0 w-[38%] z-20 pointer-events-none" style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)", background: "linear-gradient(to left, #222222 0%, rgba(34,34,34,0.7) 30%, rgba(34,34,34,0.2) 60%, transparent 100%)" }} />
 
                     {/* Навигационные стрелки - только на мобильных */}
                     {videos.length > 1 && isMobile && (
@@ -298,7 +300,7 @@ export default function VideoSection() {
                                                     transition: "font-size 0.5s cubic-bezier(0.4,0,0.2,1)",
                                                 }}
                                             >
-                                                {video.title}
+                                                {video.title.length > 25 ? video.title.slice(0, 25) + '...' : video.title}
                                             </span>
                                         </div>
                                     </div>
@@ -347,7 +349,7 @@ export default function VideoSection() {
                     {/* Slider - показываем только если видео больше одного */}
                     {videos.length > 1 && (
                         <div className="mt-8 flex items-center gap-4 px-6 sm:px-16 max-w-4xl mx-auto">
-                            <div className="relative flex-1 h-0.75 bg-[#333] rounded-full">
+                            <div className="relative flex-1 h-2 bg-[#333] rounded-none">
                                 <input
                                     type="range"
                                     min={0}
@@ -355,10 +357,10 @@ export default function VideoSection() {
                                     step={1}
                                     value={activeIndex}
                                     onChange={(e) => setActiveIndex(Number(e.target.value))}
-                                    className="absolute inset-0 w-full opacity-0 cursor-pointer h-6 -top-3"
+                                    className="absolute inset-0 w-full opacity-0 cursor-pointer h-6 -top-2"
                                 />
                                 <div
-                                    className="h-full bg-[#555] rounded-full transition-all duration-500"
+                                    className="h-full bg-[#555] rounded-none transition-all duration-500"
                                     style={{ width: `${sliderProgress}%` }}
                                 />
                             </div>
@@ -370,18 +372,34 @@ export default function VideoSection() {
             {/* Fullscreen video player modal */}
             {playingVideo && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+                    className="fixed inset-0 flex flex-col items-center justify-center bg-black"
+                    style={{ zIndex: 99999 }}
                     onClick={closePlayer}
                 >
                     <div
-                        className="relative w-full max-w-3xl mx-auto px-6"
+                        className="w-full max-w-3xl px-6 flex flex-col max-h-[95vh] py-4"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-white text-lg font-medium">
+                        {/* Title and duration - BEFORE video */}
+                        <div className="flex items-start justify-between gap-4 mb-4 w-full">
+                            <h3
+                                className="text-white text-lg font-bold px-4 py-2 rounded-lg wrap-break-word min-w-0 flex-1"
+                                style={{
+                                    color: '#ffffff',
+                                    backgroundColor: 'rgba(0,0,0,0.8)',
+                                    textShadow: '0 2px 8px rgba(0,0,0,0.8)'
+                                }}
+                            >
                                 {playingVideo.title}
                             </h3>
-                            <span className="text-white/60 text-sm tabular-nums">
+                            <span
+                                className="text-white text-lg font-semibold px-4 py-2 rounded-lg tabular-nums shrink-0"
+                                style={{
+                                    color: '#ffffff',
+                                    backgroundColor: 'rgba(0,0,0,0.8)',
+                                    textShadow: '0 2px 8px rgba(0,0,0,0.8)'
+                                }}
+                            >
                                 {formatTime(currentTime)}/{formatTime(duration)}
                             </span>
                         </div>
@@ -393,7 +411,7 @@ export default function VideoSection() {
                             <video
                                 ref={videoRef}
                                 src={playingVideo.videoUrl}
-                                className="w-full aspect-square object-contain"
+                                className="max-w-full max-h-[65vh] object-contain mx-auto rounded-2xl"
                                 autoPlay
                                 playsInline
                                 onTimeUpdate={() => {
@@ -435,7 +453,22 @@ export default function VideoSection() {
                         </div>
 
                         {playingVideo.description && (
-                            <p className="text-white/50 text-sm mt-4 wrap-break-word">{playingVideo.description}</p>
+                            <p className="text-white/70 text-base mt-4 leading-relaxed wrap-break-word">{playingVideo.description}</p>
+                        )}
+
+                        {playingVideo.news && (
+                            <Link
+                                href={`/news/${playingVideo.news.id}`}
+                                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-lg bg-[#1DCD9F]/20 border-2 border-[#1DCD9F] text-[#1DCD9F] font-semibold hover:bg-[#1DCD9F]/30 transition-all shadow-lg hover:shadow-[#1DCD9F]/50"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                                Перейти к посту
+                            </Link>
                         )}
 
                         <p className="text-center text-white/30 text-xs mt-6">

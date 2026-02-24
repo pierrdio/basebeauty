@@ -19,6 +19,8 @@ export async function PUT(
     const formData = await request.formData();
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
+    const newsIdRaw = formData.get('newsId');
+    const newsId = newsIdRaw === '' || newsIdRaw === null ? null : Number(newsIdRaw);
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
@@ -61,7 +63,8 @@ export async function PUT(
       data: {
         title: title.trim(),
         description: description?.trim() || '',
-        videoUrl
+        videoUrl,
+        newsId: newsId && !isNaN(newsId) ? newsId : null,
       }
     });
 

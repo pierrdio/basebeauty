@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 
-type BlockType = "text" | "heading" | "subheading" | "list" | "image"
+type BlockType = "text" | "heading" | "subheading" | "list" | "image" | "carousel"
 
 interface ContentBlock {
     id: string
@@ -23,6 +23,7 @@ interface News {
 export default function NewsPage() {
     const [news, setNews] = useState<News | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [activeSlide, setActiveSlide] = useState<Record<string, number>>({})
     const params = useParams()
     const newsId = params.id
 
@@ -80,7 +81,7 @@ export default function NewsPage() {
     })
 
     return (
-        <main className="mx-auto w-full max-w-3xl px-6 pt-30 pb-20">
+        <main className="mx-auto w-full max-w-3xl px-6 pt-30 pb-20 font-onest">
             {/* Date */}
             <span className="text-sm text-gray-300">{formattedDate}</span>
 
@@ -148,11 +149,71 @@ export default function NewsPage() {
                                         </AspectRatio>
                                     </div>
                                 )
+                            case "carousel":
+                                const carouselImages = block.content ? JSON.parse(block.content) : []
+                                if (carouselImages.length === 0) return null
+
+                                return (
+                                    <div key={block.id} className="relative overflow-hidden rounded-2xl">
+                                        <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${activeSlide[block.id] || 0}00%)` }}>
+                                            {carouselImages.map((imageUrl: string, index: number) => (
+                                                <div key={index} className="shrink-0 w-full">
+                                                    <AspectRatio ratio={16 / 9}>
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt={`Изображение ${index + 1}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </AspectRatio>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {carouselImages.length > 1 && (
+                                            <>
+                                                {/* Navigation dots */}
+                                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                                                    {carouselImages.map((_: string, index: number) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => setActiveSlide(prev => ({ ...prev, [block.id]: index }))}
+                                                            className={`w-2 h-2 rounded-full transition-colors ${
+                                                                (activeSlide[block.id] || 0) === index ? 'bg-white' : 'bg-white/50'
+                                                            }`}
+                                                        />
+                                                    ))}
+                                                </div>
+
+                                                {/* Navigation arrows */}
+                                                <button
+                                                    onClick={() => setActiveSlide(prev => ({
+                                                        ...prev,
+                                                        [block.id]: Math.max(0, (prev[block.id] || 0) - 1)
+                                                    }))}
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+                                                    disabled={(activeSlide[block.id] || 0) === 0}
+                                                >
+                                                    ‹
+                                                </button>
+                                                <button
+                                                    onClick={() => setActiveSlide(prev => ({
+                                                        ...prev,
+                                                        [block.id]: Math.min(carouselImages.length - 1, (prev[block.id] || 0) + 1)
+                                                    }))}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+                                                    disabled={(activeSlide[block.id] || 0) === carouselImages.length - 1}
+                                                >
+                                                    ›
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                )
                             case "list":
                                 return (
                                     <ul
                                         key={block.id}
-                                        className="space-y-2 text-gray-300 text-lg pl-5"
+                                        className="space-y-2 text-gray-300 text-lg font-medium pl-5"
                                     >
                                         {block.content
                                             .split("\n")
@@ -169,7 +230,7 @@ export default function NewsPage() {
                                 return (
                                     <p
                                         key={block.id}
-                                        className="text-gray-300 text-lg leading-relaxed whitespace-pre-wrap wrap-break-word"
+                                        className="text-gray-300 text-lg font-medium leading-relaxed whitespace-pre-wrap wrap-break-word"
                                     >
                                         {block.content}
                                     </p>

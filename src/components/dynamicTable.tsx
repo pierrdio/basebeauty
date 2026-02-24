@@ -197,7 +197,8 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
       if (key === 'updatedAt') return false;
       if (key === 'blocks') return false;
       if (key === 'videoUrl') return false;
-      
+      if (key === 'newsId') return false;
+
       // Скрываем эти поля только для contact submissions (которые есть поле phone)
       if (data[0]?.hasOwnProperty('phone')) {
         if (key === 'fileName') return false;
@@ -226,6 +227,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
       if (col === 'blocks') headerName = 'Контент';
       if (col === 'createdAt') headerName = 'Создано';
       if (col === 'updatedAt') headerName = 'Обновлено';
+      if (col === 'news') headerName = 'Привязана к новости';
 
       return {
         accessorKey: col,
@@ -326,6 +328,20 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
             return <span className="text-gray-600 dark:text-gray-400 text-sm font-medium max-w-12 truncate whitespace-nowrap">{value ?? "-"}</span>;
           }
 
+          if (col === "news") {
+            if (!value || typeof value !== "object") {
+              return <span className="text-gray-400 text-sm">—</span>;
+            }
+            return (
+              <Badge
+                className="px-3 py-1 rounded-md text-sm font-medium bg-[#1DCD9F]/10 text-[#1DCD9F] border border-[#1DCD9F]/30 cursor-pointer hover:bg-[#1DCD9F]/20 transition-colors"
+                title={value.title}
+                onClick={() => alert(value.title)}
+              >
+                {value.title.length > 25 ? value.title.slice(0, 25) + '...' : value.title}
+              </Badge>
+            );
+          }
 
           if (typeof value === "object" && value !== null) {
             const { image, imageUrl, thumbnailUrl, thumbnail, image_url, avatar, qrCode, profileImage, icon, ...rest } = value;
@@ -517,11 +533,11 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
                 <div 
                   className={`
                     ${col === 'title' || col === 'description'
-                      ? 'max-w-xs whitespace-normal wrap-break-word' 
-                      : typeof value === 'string' && value.length > 50 
-                        ? 'max-w-xs truncate' 
-                        : typeof value === 'string' && value.length > 20 
-                          ? 'max-w-xs wrap-break-word line-clamp-2' 
+                      ? 'max-w-70 whitespace-normal wrap-break-word'
+                      : typeof value === 'string' && value.length > 50
+                        ? 'max-w-xs truncate'
+                        : typeof value === 'string' && value.length > 20
+                          ? 'max-w-xs wrap-break-word line-clamp-2'
                           : 'max-w-[150px] truncate whitespace-nowrap'
                     }
                   `}
@@ -961,9 +977,9 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({ data, onDataChange, 
 
       {/* Video Preview Dialog */}
       <Dialog open={!!videoPreview} onOpenChange={() => setVideoPreview(null)}>
-        <DialogContent className="sm:max-w-3xl">
-          <DialogHeader>
-            <DialogTitle className="truncate pr-6 max-w-full" title={videoPreview?.title}>
+        <DialogContent className="sm:max-w-3xl overflow-hidden">
+          <DialogHeader className="overflow-hidden">
+            <DialogTitle className="pr-6 wrap-break-word break-all">
               {videoPreview?.title}
             </DialogTitle>
           </DialogHeader>

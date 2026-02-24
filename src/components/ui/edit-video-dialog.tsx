@@ -21,6 +21,8 @@ interface Video {
   title: string
   description: string
   videoUrl: string
+  newsId?: number | null
+  news?: { id: number; title: string } | null
   createdAt: string
   updatedAt: string
 }
@@ -36,22 +38,36 @@ export function EditVideoDialog({ video, isOpen, onClose, onSave }: EditVideoDia
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    videos: [] as File[]
+    videos: [] as File[],
+    newsId: "" as string
   })
+  const [newsList, setNewsList] = useState<{ id: number; title: string }[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    // Fetch news list when dialog opens
+    if (isOpen) {
+      fetch('/api/news')
+        .then(res => res.json())
+        .then(data => setNewsList(data))
+        .catch(() => {})
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (video) {
       setFormData({
         title: video.title,
         description: video.description,
-        videos: []
+        videos: [],
+        newsId: video.newsId ? String(video.newsId) : ""
       })
     } else {
       setFormData({
         title: "",
         description: "",
-        videos: []
+        videos: [],
+        newsId: ""
       })
     }
   }, [video])
@@ -71,6 +87,7 @@ export function EditVideoDialog({ video, isOpen, onClose, onSave }: EditVideoDia
       const formDataToSend = new FormData()
       formDataToSend.append('title', formData.title)
       formDataToSend.append('description', formData.description)
+      formDataToSend.append('newsId', formData.newsId)
       if (formData.videos.length > 0) {
         formDataToSend.append('video', formData.videos[0])
       }
@@ -128,6 +145,21 @@ export function EditVideoDialog({ video, isOpen, onClose, onSave }: EditVideoDia
               rows={4}
               className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
             />
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="edit-video-news">Привязать к новости</Label>
+            <select
+              id="edit-video-news"
+              value={formData.newsId}
+              onChange={(e) => setFormData(prev => ({ ...prev, newsId: e.target.value }))}
+              className="w-full px-3 py-2 text-sm border rounded-md bg-background"
+            >
+              <option value="">Без привязки</option>
+              {newsList.map((item) => (
+                <option key={item.id} value={item.id}>{item.title}</option>
+              ))}
+            </select>
           </div>
 
           <div className="grid gap-2">

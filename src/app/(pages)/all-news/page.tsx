@@ -118,7 +118,7 @@ export default function AllNews() {
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-onest">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-onest pb-10">
                             {paginatedNews.map((item) => {
                             // Extract first text block for preview
                             let previewText = ""
@@ -131,10 +131,10 @@ export default function AllNews() {
                             }
 
                             return (
-                                <Link key={item.id} href={`/news/${item.id}`} className="group">
-                                    <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/10 hover:border-[#1DCD9F]/50 transition-all duration-300">
+                                <Link key={item.id} href={`/news/${item.id}`} className="group h-full">
+                                    <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/10 hover:border-[#1DCD9F]/50 transition-all duration-300 h-full flex flex-col">
                                         {/* Cover Image */}
-                                        <div className="aspect-video relative overflow-hidden">
+                                        <div className="aspect-video relative overflow-hidden shrink-0">
                                             {item.cover ? (
                                                 <Image
                                                     src={item.cover}
@@ -150,7 +150,7 @@ export default function AllNews() {
                                         </div>
 
                                         {/* Content */}
-                                        <div className="p-6">
+                                        <div className="p-6 flex flex-col flex-1">
                                             <div className="flex items-center gap-2 text-sm text-white/60 mb-3">
                                                 <Calendar className="h-4 w-4" />
                                                 <span>{new Date(item.createdAt).toLocaleDateString('ru-RU')}</span>
@@ -168,7 +168,7 @@ export default function AllNews() {
                                                     : "Нет описания"}
                                             </p>
 
-                                            <div className="mt-4">
+                                            <div className="mt-auto pt-4">
                                                 <span className="text-[#1DCD9F] text-sm font-medium group-hover:underline">
                                                     Читать далее →
                                                 </span>

@@ -42,7 +42,8 @@ export default function Dashboard() {
   const [videoFormData, setVideoFormData] = useState({
     title: "",
     description: "",
-    videos: [] as File[]
+    videos: [] as File[],
+    newsId: "" as string
   })
 
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function Dashboard() {
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
@@ -175,6 +176,9 @@ export default function Dashboard() {
       formDataToSend.append('title', videoFormData.title)
       formDataToSend.append('description', videoFormData.description)
       formDataToSend.append('video', videoFormData.videos[0])
+      if (videoFormData.newsId) {
+        formDataToSend.append('newsId', videoFormData.newsId)
+      }
 
       const response = await fetch('/api/videos/add', {
         method: 'POST',
@@ -184,7 +188,7 @@ export default function Dashboard() {
       if (response.ok) {
         await response.json()
         // Reset form
-        setVideoFormData({ title: '', description: '', videos: [] })
+        setVideoFormData({ title: '', description: '', videos: [], newsId: '' })
         // Refresh videos list
         fetchVideos()
         toast.success('Видео успешно добавлено!')
@@ -420,6 +424,20 @@ export default function Dashboard() {
                                       rows={4}
                                       className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
                                     />
+                                  </div>
+                                  <div className="grid gap-3">
+                                    <Label htmlFor="video-news">Привязать к новости</Label>
+                                    <select
+                                      id="video-news"
+                                      value={videoFormData.newsId}
+                                      onChange={(e) => setVideoFormData(prev => ({ ...prev, newsId: e.target.value }))}
+                                      className="w-full px-3 py-2 text-sm border rounded-md bg-background"
+                                    >
+                                      <option value="">Без привязки</option>
+                                      {news.map((item) => (
+                                        <option key={item.id} value={item.id}>{item.title}</option>
+                                      ))}
+                                    </select>
                                   </div>
                                   <div className="grid gap-3">
                                     <Label htmlFor="video-file">Видео файл</Label>

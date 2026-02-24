@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { toast } from "sonner"
 
-type BlockType = "text" | "heading" | "subheading" | "list" | "image"
+type BlockType = "text" | "heading" | "subheading" | "list" | "image" | "carousel"
 
 interface ContentBlock {
     id: string
@@ -27,6 +27,8 @@ export default function AddNews() {
     const [coverPreview, setCoverPreview] = useState<string | null>(null)
     const [blocks, setBlocks] = useState<ContentBlock[]>([])
     const [blockImages, setBlockImages] = useState<Record<string, File>>({})
+    const [carouselImages, setCarouselImages] = useState<Record<string, File[]>>({})
+    const [carouselExistingUrls, setCarouselExistingUrls] = useState<Record<string, string[]>>({})
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const titleRef = useRef<HTMLTextAreaElement>(null)
@@ -42,6 +44,13 @@ export default function AddNews() {
                     try {
                         const parsed = JSON.parse(data.blocks || "[]")
                         setBlocks(parsed)
+                        const existingUrls: Record<string, string[]> = {}
+                        for (const b of parsed) {
+                            if (b.type === "carousel" && b.content) {
+                                try { existingUrls[b.id] = JSON.parse(b.content) } catch {}
+                            }
+                        }
+                        setCarouselExistingUrls(existingUrls)
                     } catch {
                         setBlocks([])
                     }
@@ -113,6 +122,16 @@ export default function AddNews() {
             delete next[id]
             return next
         })
+        setCarouselImages((prev) => {
+            const next = { ...prev }
+            delete next[id]
+            return next
+        })
+        setCarouselExistingUrls((prev) => {
+            const next = { ...prev }
+            delete next[id]
+            return next
+        })
     }
 
     const handleBlockImageSelect = (blockId: string, file: File) => {
@@ -140,7 +159,13 @@ export default function AddNews() {
         try {
             const formData = new FormData()
             formData.append("title", title)
-            formData.append("blocks", JSON.stringify(blocks))
+            const blocksToSend = blocks.map(block => {
+                if (block.type === "carousel") {
+                    return { ...block, content: JSON.stringify(carouselExistingUrls[block.id] || []) }
+                }
+                return block
+            })
+            formData.append("blocks", JSON.stringify(blocksToSend))
             if (coverFile) {
                 formData.append("cover", coverFile)
             }
@@ -148,6 +173,13 @@ export default function AddNews() {
             // Append block images
             for (const [blockId, file] of Object.entries(blockImages)) {
                 formData.append(`block-image-${blockId}`, file)
+            }
+
+            // Append carousel images
+            for (const [blockId, files] of Object.entries(carouselImages)) {
+                files.forEach((file, index) => {
+                    formData.append(`carousel-image-${blockId}-${index}`, file)
+                })
             }
 
             const url = editId ? `/api/news/${editId}` : "/api/news/add"
@@ -215,6 +247,18 @@ export default function AddNews() {
             icon: <ImageIcon className="w-5 h-5" />,
             label: "Фотография",
             desc: "Загрузить изображение",
+        },
+        {
+            type: "carousel",
+            icon: (
+                <div className="flex gap-1">
+                    <div className="w-2 h-5 bg-current rounded" />
+                    <div className="w-2 h-5 bg-current rounded opacity-60" />
+                    <div className="w-2 h-5 bg-current rounded opacity-30" />
+                </div>
+            ),
+            label: "Карусель изображений",
+            desc: "Загрузить несколько изображений",
         },
     ]
 
@@ -347,6 +391,12 @@ export default function AddNews() {
                                     )}
                                     {block.type === "text" && (
                                         <textarea
+                                            ref={(el) => {
+                                                if (el) {
+                                                    el.style.height = "auto"
+                                                    el.style.height = el.scrollHeight + "px"
+                                                }
+                                            }}
                                             value={block.content}
                                             onChange={(e) =>
                                                 updateBlock(block.id, e.target.value)
@@ -363,6 +413,12 @@ export default function AddNews() {
                                     )}
                                     {block.type === "list" && (
                                         <textarea
+                                            ref={(el) => {
+                                                if (el) {
+                                                    el.style.height = "auto"
+                                                    el.style.height = el.scrollHeight + "px"
+                                                }
+                                            }}
                                             value={block.content}
                                             onChange={(e) =>
                                                 updateBlock(block.id, e.target.value)
@@ -411,6 +467,131 @@ export default function AddNews() {
                                                         }}
                                                     />
                                                 </label>
+                                            )}
+                                        </div>
+                                    )}
+                                    {block.type === "carousel" && (
+                                        <div>
+                                            <input
+                                                id={`carousel-input-${block.id}`}
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/jpg"
+                                                multiple
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const files = Array.from(e.target.files || [])
+                                                    const validFiles = files.filter(file => {
+                                                        if (!file.type.startsWith("image/")) {
+                                                            toast.error("Поддерживаются только изображения")
+                                                            return false
+                                                        }
+                                                        if (file.size > 30 * 1024 * 1024) {
+                                                            toast.error("Файл слишком большой. Максимум 30 Мб")
+                                                            return false
+                                                        }
+                                                        return true
+                                                    })
+                                                    if (validFiles.length > 0) {
+                                                        setCarouselImages(prev => ({
+                                                            ...prev,
+                                                            [block.id]: [...(prev[block.id] || []), ...validFiles]
+                                                        }))
+                                                    }
+                                                    e.target.value = ''
+                                                }}
+                                            />
+                                            {(carouselExistingUrls[block.id]?.length > 0 || carouselImages[block.id]?.length > 0) ? (
+                                                <div className="space-y-3">
+                                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                                        {carouselExistingUrls[block.id]?.map((url, index) => (
+                                                            <div key={`existing-${index}`} className="relative">
+                                                                <div className="aspect-square rounded-lg overflow-hidden">
+                                                                    <img
+                                                                        src={url}
+                                                                        alt={`Изображение ${index + 1}`}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setCarouselExistingUrls(prev => ({
+                                                                            ...prev,
+                                                                            [block.id]: prev[block.id].filter((_, i) => i !== index)
+                                                                        }))
+                                                                    }}
+                                                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-75 hover:opacity-100 z-10"
+                                                                >
+                                                                    <X className="w-3 h-3" />
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                        {carouselImages[block.id]?.map((file, index) => (
+                                                            <div key={`new-${index}`} className="relative">
+                                                                <div className="aspect-square rounded-lg overflow-hidden">
+                                                                    <img
+                                                                        src={URL.createObjectURL(file)}
+                                                                        alt={`Изображение ${index + 1}`}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setCarouselImages(prev => ({
+                                                                            ...prev,
+                                                                            [block.id]: prev[block.id].filter((_, i) => i !== index)
+                                                                        }))
+                                                                    }}
+                                                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-75 hover:opacity-100 z-10"
+                                                                >
+                                                                    <X className="w-3 h-3" />
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="w-full"
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const fileInput = document.getElementById(`carousel-input-${block.id}`) as HTMLInputElement
+                                                            if (fileInput) fileInput.click()
+                                                        }}
+                                                    >
+                                                        Добавить ещё
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-3">
+                                                    <div
+                                                        className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-xl transition-colors cursor-pointer"
+                                                        onClick={() => {
+                                                            const fileInput = document.getElementById(`carousel-input-${block.id}`) as HTMLInputElement
+                                                            if (fileInput) fileInput.click()
+                                                        }}
+                                                    >
+                                                        <AspectRatio ratio={16 / 9}>
+                                                            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                                                                <ImageIcon className="w-10 h-10 text-gray-300" />
+                                                                <p className="text-sm text-gray-400">
+                                                                    Нажмите, чтобы выбрать изображения для карусели
+                                                                </p>
+                                                            </div>
+                                                        </AspectRatio>
+                                                    </div>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="w-full"
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const fileInput = document.getElementById(`carousel-input-${block.id}`) as HTMLInputElement
+                                                            if (fileInput) fileInput.click()
+                                                        }}
+                                                    >
+                                                        Добавить изображение
+                                                    </Button>
+                                                </div>
                                             )}
                                         </div>
                                     )}

@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try {
         const videos = await prisma.video.findMany({
-            orderBy: { id: 'asc' },
+            orderBy: { id: 'desc' },
+            include: { news: { select: { id: true, title: true } } },
         });
 
         return NextResponse.json(videos, { status: 200 });
