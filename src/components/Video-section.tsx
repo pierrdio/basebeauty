@@ -389,11 +389,33 @@ export default function VideoSection() {
                     onClick={closePlayer}
                 >
                     <div
-                        className="w-full max-w-3xl px-6 flex flex-col max-h-[95vh] py-4"
+                        className="w-full max-w-3xl px-6 flex flex-col max-h-[95vh] py-4 relative"
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {/* Top overlay area - closes modal */}
+                        <div 
+                            className="absolute top-0 left-0 right-0 h-20 z-10 cursor-pointer"
+                            onClick={closePlayer}
+                        />
+                        
+                        {/* Side overlay areas - closes modal */}
+                        <div 
+                            className="absolute top-20 bottom-20 left-0 w-8 sm:w-16 z-10 cursor-pointer"
+                            onClick={closePlayer}
+                        />
+                        <div 
+                            className="absolute top-20 bottom-20 right-0 w-8 sm:w-16 z-10 cursor-pointer"
+                            onClick={closePlayer}
+                        />
+                        
+                        {/* Bottom overlay area - closes modal */}
+                        <div 
+                            className="absolute bottom-0 left-0 right-0 h-20 z-10 cursor-pointer"
+                            onClick={closePlayer}
+                        />
+
                         {/* Title and duration - BEFORE video */}
-                        <div className="flex items-start justify-between gap-4 mb-4 w-full">
+                        <div className="flex items-start justify-between gap-4 mb-4 w-full relative z-20" onClick={(e) => e.stopPropagation()}>
                             <h3
                                 className="text-white text-sm font-bold px-3 py-2 rounded-lg wrap-break-word min-w-0 flex-1"
                                 style={{
@@ -417,7 +439,7 @@ export default function VideoSection() {
                         </div>
 
                         <div
-                            className="relative rounded-2xl overflow-hidden bg-black cursor-pointer"
+                            className="relative rounded-2xl overflow-hidden bg-black cursor-pointer z-20"
                             onClick={togglePlay}
                         >
                             <video
@@ -485,7 +507,7 @@ export default function VideoSection() {
                             )}
                         </div>
 
-                        <div className="mt-4 relative h-1 bg-white/10 rounded-full">
+                        <div className="mt-4 relative h-1 bg-white/10 rounded-full z-20">
                             <div
                                 className="h-full bg-white/60 rounded-full transition-all duration-200"
                                 style={{ width: duration > 0 ? `${(currentTime / duration) * 100}%` : "0%" }}
@@ -508,7 +530,7 @@ export default function VideoSection() {
                         {playingVideo.news && (
                             <Link
                                 href={`/news/${playingVideo.news.id}`}
-                                className="inline-flex items-center justify-center gap-2 mt-4 sm:mt-6 px-4 sm:px-6 py-2 sm:py-3 rounded-lg bg-[#1DCD9F]/20 border-2 border-[#1DCD9F] text-[#1DCD9F] text-sm sm:text-base font-semibold hover:bg-[#1DCD9F]/30 transition-all shadow-lg hover:shadow-[#1DCD9F]/50"
+                                className="inline-flex items-center justify-center gap-2 mt-4 sm:mt-6 px-4 sm:px-6 py-2 sm:py-3 rounded-lg bg-[#1DCD9F]/20 border-2 border-[#1DCD9F] text-[#1DCD9F] text-sm sm:text-base font-semibold hover:bg-[#1DCD9F]/30 transition-all shadow-lg hover:shadow-[#1DCD9F]/50 z-20"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-5 sm:h-5">
@@ -520,7 +542,7 @@ export default function VideoSection() {
                             </Link>
                         )}
 
-                        <p className="text-center text-white/30 text-xs mt-6">
+                        <p className="text-center text-white/30 text-xs mt-6 z-20">
                             Нажмите Esc или за пределами видео чтобы закрыть
                         </p>
                     </div>
