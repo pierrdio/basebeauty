@@ -395,7 +395,7 @@ export default function VideoSection() {
                                     textShadow: '0 2px 8px rgba(0,0,0,0.8)'
                                 }}
                             >
-                                {playingVideo.title.slice(0, 60)}
+                                {playingVideo.title}
                             </h3>
                             <span
                                 className="text-white text-sm font-semibold px-3 py-2 rounded-lg tabular-nums shrink-0"

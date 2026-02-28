@@ -404,18 +404,18 @@ export default function Dashboard() {
                                 </SheetHeader>
                                 <form onSubmit={handleVideoSubmit} className="grid flex-1 auto-rows-min gap-6 px-4">
                                   <div className="grid gap-3">
-                                    <Label htmlFor="video-title">Название (макс. 60 символов)</Label>
+                                    <Label htmlFor="video-title">Название (макс. 100 символов)</Label>
                                     <Input
                                       id="video-title"
                                       name="title"
                                       type="text"
                                       value={videoFormData.title}
                                       onChange={(e) => setVideoFormData(prev => ({ ...prev, title: e.target.value }))}
-                                      maxLength={60}
+                                      maxLength={100}
                                       required
                                     />
                                     <p className="text-xs text-gray-500">
-                                      {videoFormData.title.length}/60 символов
+                                      {videoFormData.title.length}/100 символов
                                     </p>
                                   </div>
                                   <div className="grid gap-3">

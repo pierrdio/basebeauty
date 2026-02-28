@@ -127,16 +127,16 @@ export function EditVideoDialog({ video, isOpen, onClose, onSave }: EditVideoDia
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="edit-video-title">Название (макс. 60 символов)</Label>
+            <Label htmlFor="edit-video-title">Название (макс. 100 символов)</Label>
             <Input
               id="edit-video-title"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              maxLength={60}
+              maxLength={100}
               required
             />
             <p className="text-xs text-gray-500">
-              {formData.title.length}/60 символов
+              {formData.title.length}/100 символов
             </p>
           </div>
 
