@@ -127,24 +127,32 @@ export function EditVideoDialog({ video, isOpen, onClose, onSave }: EditVideoDia
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="edit-video-title">Название</Label>
+            <Label htmlFor="edit-video-title">Название (макс. 60 символов)</Label>
             <Input
               id="edit-video-title"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              maxLength={60}
               required
             />
+            <p className="text-xs text-gray-500">
+              {formData.title.length}/60 символов
+            </p>
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="edit-video-description">Описание</Label>
+            <Label htmlFor="edit-video-description">Описание (макс. 250 символов)</Label>
             <textarea
               id="edit-video-description"
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              maxLength={250}
               rows={4}
               className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
             />
+            <p className="text-xs text-gray-500">
+              {formData.description.length}/250 символов
+            </p>
           </div>
 
           <div className="grid gap-2">

@@ -404,26 +404,34 @@ export default function Dashboard() {
                                 </SheetHeader>
                                 <form onSubmit={handleVideoSubmit} className="grid flex-1 auto-rows-min gap-6 px-4">
                                   <div className="grid gap-3">
-                                    <Label htmlFor="video-title">Название</Label>
+                                    <Label htmlFor="video-title">Название (макс. 60 символов)</Label>
                                     <Input
                                       id="video-title"
                                       name="title"
                                       type="text"
                                       value={videoFormData.title}
                                       onChange={(e) => setVideoFormData(prev => ({ ...prev, title: e.target.value }))}
+                                      maxLength={60}
                                       required
                                     />
+                                    <p className="text-xs text-gray-500">
+                                      {videoFormData.title.length}/60 символов
+                                    </p>
                                   </div>
                                   <div className="grid gap-3">
-                                    <Label htmlFor="video-desc">Описание</Label>
+                                    <Label htmlFor="video-desc">Описание (макс. 250 символов)</Label>
                                     <textarea
                                       id="video-desc"
                                       name="description"
                                       value={videoFormData.description}
                                       onChange={(e) => setVideoFormData(prev => ({ ...prev, description: e.target.value }))}
+                                      maxLength={250}
                                       rows={4}
                                       className="w-full min-h-25 px-3 py-2 text-sm border rounded-md resize-y"
                                     />
+                                    <p className="text-xs text-gray-500">
+                                      {videoFormData.description.length}/250 символов
+                                    </p>
                                   </div>
                                   <div className="grid gap-3">
                                     <Label htmlFor="video-news">Привязать к новости</Label>

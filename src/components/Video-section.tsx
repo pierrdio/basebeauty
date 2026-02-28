@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
+import { MoreHorizontal, X } from "lucide-react"
 
 interface Video {
     id: number
@@ -69,6 +70,7 @@ export default function VideoSection() {
     const [duration, setDuration] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+    const [showFullDescription, setShowFullDescription] = useState(false)
     const videoRef = useRef<HTMLVideoElement>(null)
     const carouselRef = useRef<HTMLDivElement>(null)
     const touchStartX = useRef<number>(0)
@@ -106,6 +108,7 @@ export default function VideoSection() {
     const closePlayer = useCallback(() => {
         setPlayingVideo(null)
         setIsPlaying(false)
+        setShowFullDescription(false)
     }, [])
 
     const goToNext = useCallback(() => {
@@ -135,7 +138,9 @@ export default function VideoSection() {
     useEffect(() => {
         if (!playingVideo) return
         const handleKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") closePlayer()
+            if (e.key === "Escape") {
+                closePlayer()
+            }
             if (e.key === " ") {
                 e.preventDefault()
                 togglePlay()
@@ -383,17 +388,17 @@ export default function VideoSection() {
                         {/* Title and duration - BEFORE video */}
                         <div className="flex items-start justify-between gap-4 mb-4 w-full">
                             <h3
-                                className="text-white text-lg font-bold px-4 py-2 rounded-lg wrap-break-word min-w-0 flex-1"
+                                className="text-white text-sm font-bold px-3 py-2 rounded-lg wrap-break-word min-w-0 flex-1"
                                 style={{
                                     color: '#ffffff',
                                     backgroundColor: 'rgba(0,0,0,0.8)',
                                     textShadow: '0 2px 8px rgba(0,0,0,0.8)'
                                 }}
                             >
-                                {playingVideo.title}
+                                {playingVideo.title.slice(0, 60)}
                             </h3>
                             <span
-                                className="text-white text-lg font-semibold px-4 py-2 rounded-lg tabular-nums shrink-0"
+                                className="text-white text-sm font-semibold px-3 py-2 rounded-lg tabular-nums shrink-0"
                                 style={{
                                     color: '#ffffff',
                                     backgroundColor: 'rgba(0,0,0,0.8)',
@@ -430,6 +435,47 @@ export default function VideoSection() {
                                     </svg>
                                 </div>
                             )}
+
+                            {/* Описание внутри видео */}
+                            {playingVideo.description && (
+                                <div className="absolute bottom-0 left-0 right-0">
+                                    <div
+                                        className="bg-black/20 backdrop-blur-[2px] px-3 sm:px-4 py-2 sm:py-3 overflow-y-auto transition-all duration-300"
+                                        style={{
+                                            maxHeight: showFullDescription ? '40vh' : 'auto'
+                                        }}
+                                    >
+                                        <p className="text-white text-xs sm:text-sm leading-relaxed wrap-break-word whitespace-pre-wrap">
+                                            {showFullDescription
+                                                ? playingVideo.description
+                                                : playingVideo.description.slice(0, 50)
+                                            }
+                                            {playingVideo.description.length > 50 && !showFullDescription && '...'}
+                                        </p>
+                                        {playingVideo.description.length > 50 && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setShowFullDescription(!showFullDescription)
+                                                }}
+                                                className="mt-1.5 sm:mt-2 text-white/80 hover:text-white transition-colors flex items-center gap-1"
+                                            >
+                                                {!showFullDescription ? (
+                                                    <>
+                                                        <MoreHorizontal size={14} className="sm:w-4 sm:h-4" />
+                                                        <span className="text-xs">еще</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <X size={14} className="sm:w-4 sm:h-4" />
+                                                        <span className="text-xs">свернуть</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="mt-4 relative h-1 bg-white/10 rounded-full">
@@ -452,17 +498,13 @@ export default function VideoSection() {
                             />
                         </div>
 
-                        {playingVideo.description && (
-                            <p className="text-white/70 text-base mt-4 leading-relaxed wrap-break-word">{playingVideo.description}</p>
-                        )}
-
                         {playingVideo.news && (
                             <Link
                                 href={`/news/${playingVideo.news.id}`}
-                                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-lg bg-[#1DCD9F]/20 border-2 border-[#1DCD9F] text-[#1DCD9F] font-semibold hover:bg-[#1DCD9F]/30 transition-all shadow-lg hover:shadow-[#1DCD9F]/50"
+                                className="inline-flex items-center justify-center gap-2 mt-4 sm:mt-6 px-4 sm:px-6 py-2 sm:py-3 rounded-lg bg-[#1DCD9F]/20 border-2 border-[#1DCD9F] text-[#1DCD9F] text-sm sm:text-base font-semibold hover:bg-[#1DCD9F]/30 transition-all shadow-lg hover:shadow-[#1DCD9F]/50"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-5 sm:h-5">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                                     <polyline points="15 3 21 3 21 9" />
                                     <line x1="10" y1="14" x2="21" y2="3" />

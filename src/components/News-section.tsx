@@ -192,14 +192,10 @@ export default function NewsSection() {
                         </div>
 
                         {/* Text */}
-                        <div className="flex-1 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
+                        <div className="flex-1 min-h-0 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
                             <div className="bg-[#111111] rounded-xl p-6 h-full overflow-hidden">
-                                <p className="text-white/80 text-base leading-relaxed wrap-break-word">
-                                    {previewText
-                                        ? previewText.length > 600
-                                            ? previewText.slice(0, 600) + "..."
-                                            : previewText
-                                        : "Нет описания"}
+                                <p className="text-white/80 text-base leading-relaxed wrap-break-word line-clamp-[12]">
+                                    {previewText || "Нет описания"}
                                 </p>
                             </div>
                         </div>
