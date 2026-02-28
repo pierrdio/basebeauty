@@ -34,11 +34,11 @@ function useCarouselSizes() {
             const w = window.innerWidth
             if (w < 640) {
                 // Мобильные устройства
-                const cw = Math.min(w * 0.75, 280)
+                const cw = Math.min(w * 0.85, 320)
                 setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 16, containerHeight: cw * 1.8, centerHeight: cw * 1.53, sideHeight: cw, showSides: false })
             } else if (w < 800) {
                 // Маленькие планшеты
-                const cw = Math.min(w * 0.32, 300)
+                const cw = Math.min(w * 0.4, 340)
                 setSizes({ cardWidth: cw * 0.85, centerWidth: cw, gap: 30, containerHeight: cw * 1.85, centerHeight: cw * 1.53, sideHeight: cw * 1.3, showSides: false })
             } else if (w < 1024) {
                 // Большие планшеты - с маленькими боковыми видео
@@ -289,24 +289,31 @@ export default function VideoSection() {
                                     }}
                                 >
                                     {/* Title badge */}
-                                    <div className="mb-4 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
+                                    <div className="mb-4 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl w-full">
                                         <div
-                                            className="bg-[#000] rounded-xl text-center"
+                                            className="bg-[#000] rounded-xl py-2 px-2 sm:px-4 md:px-6"
                                             style={{
-                                                padding: isCenter ? "10px 32px" : "8px 24px",
                                                 transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
                                             }}
                                         >
-                                            <span
-                                                className="font-semibold tracking-wide whitespace-nowrap"
+                                            <h3
+                                                className="font-semibold wrap-break-word leading-tight text-center"
                                                 style={{
                                                     color: "#1DCD9F",
-                                                    fontSize: isCenter ? "1.5rem" : "1.1rem",
+                                                    fontSize: isCenter
+                                                        ? (video.title.length > 50
+                                                            ? "clamp(0.75rem, 1.5vw, 1rem)"
+                                                            : video.title.length > 30
+                                                            ? "clamp(0.85rem, 1.8vw, 1.2rem)"
+                                                            : "clamp(1rem, 2vw, 1.5rem)")
+                                                        : "clamp(0.7rem, 1.2vw, 0.9rem)",
                                                     transition: "font-size 0.5s cubic-bezier(0.4,0,0.2,1)",
+                                                    wordBreak: "break-word",
+                                                    overflowWrap: "break-word",
                                                 }}
                                             >
-                                                {video.title.length > 25 ? video.title.slice(0, 25) + '...' : video.title}
-                                            </span>
+                                                {video.title}
+                                            </h3>
                                         </div>
                                     </div>
 
