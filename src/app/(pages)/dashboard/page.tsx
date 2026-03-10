@@ -329,7 +329,6 @@ export default function Dashboard() {
                                     <PhotoUpload
                                       value={formData.photos}
                                       onChange={(files) => setFormData(prev => ({ ...prev, photos: files }))}
-                                      maxFiles={5}
                                     />
                                   </div>
                                 </form>

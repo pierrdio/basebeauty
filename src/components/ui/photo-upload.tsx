@@ -94,7 +94,7 @@ export function PhotoUpload({ value, onChange, maxFiles, accept }: PhotoUploadPr
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium">
-              Выбранные файлы ({value.length}):
+              Выбранные файлы ({value.length})
               {maxFiles && maxFiles > 1 ? ` (макс. ${maxFiles})` : ''}
             </p>
             {value.length > 0 && (

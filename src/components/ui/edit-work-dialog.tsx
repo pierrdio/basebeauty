@@ -139,7 +139,6 @@ export function EditWorkDialog({ work, isOpen, onClose, onSave }: EditWorkDialog
             <PhotoUpload
               value={formData.photos}
               onChange={(files) => setFormData(prev => ({ ...prev, photos: files }))}
-              maxFiles={5}
             />
             <p className="text-xs text-gray-500">
               Новые изображения заменят существующие. Оставьте пустым, чтобы сохранить текущие.
