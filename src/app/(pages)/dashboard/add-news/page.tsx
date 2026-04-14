@@ -89,7 +89,7 @@ export default function AddNews() {
         onDrop,
         accept: {
             "image/*": [".jpg", ".jpeg", ".png"],
-            "video/*": [".mp4", ".webm"],
+            "video/*": [".mp4", ".webm", ".mov"],
         },
         multiple: false,
     })
@@ -324,7 +324,7 @@ export default function AddNews() {
                                         Добавить обложку
                                     </p>
                                     <p className="text-sm text-gray-500 mt-1">
-                                        Фото (JPG, JPEG, PNG) до 30 Мб, видео (MP4, WebM) до 50 Мб
+                                        Фото (JPG, JPEG, PNG) до 30 Мб, видео (MP4, WebM, MOV) до 50 Мб
                                     </p>
                                 </div>
                                 <Button

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { extname, join } from "path";
 
 const ALLOWED_IMAGE_EXTS = [".jpg", ".jpeg", ".png"];
-const ALLOWED_VIDEO_EXTS = [".mp4", ".webm"];
+const ALLOWED_VIDEO_EXTS = [".mp4", ".webm", ".mov"];
 const MAX_IMAGE_SIZE = 30 * 1024 * 1024; // 30 MB
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
 

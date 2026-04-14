@@ -133,15 +133,28 @@ export default function AllNews() {
                             return (
                                 <Link key={item.id} href={`/news/${item.id}`} className="group h-full">
                                     <div className="bg-[#111111] rounded-xl overflow-hidden border border-white/10 hover:border-[#1DCD9F]/50 transition-all duration-300 h-full flex flex-col">
-                                        {/* Cover Image */}
+                                        {/* Cover Image/Video */}
                                         <div className="aspect-video relative overflow-hidden shrink-0">
                                             {item.cover ? (
-                                                <Image
-                                                    src={item.cover}
-                                                    alt={item.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                                />
+                                                /\.(mp4|webm|mov)$/i.test(item.cover) ? (
+                                                    <video
+                                                        src={item.cover}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                        muted
+                                                        loop
+                                                        playsInline
+                                                        preload="metadata"
+                                                        onMouseEnter={(e) => e.currentTarget.play()}
+                                                        onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0 }}
+                                                    />
+                                                ) : (
+                                                    <Image
+                                                        src={item.cover}
+                                                        alt={item.title}
+                                                        fill
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                )
                                             ) : (
                                                 <div className="w-full h-full bg-[#222] flex items-center justify-center">
                                                     <div className="text-white/40 text-sm">Нет изображения</div>

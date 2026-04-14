@@ -77,7 +77,7 @@ export default function HeroWorks() {
     }
 
     // Helper function to truncate title
-    const truncateTitle = (title: string, maxLength: number = 25) => {
+    const truncateTitle = (title: string, maxLength: number = 30) => {
         return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
     };
 
@@ -104,7 +104,7 @@ export default function HeroWorks() {
                             className="object-cover"
                             priority
                         />
-                        <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                        <div className="pointer-events-none absolute left-0 bottom-0 rounded-full backdrop-blur-sm from-black/10 to-transparent px-5 py-2 text-lg font-light text-white bg-linear-to-t font-onest-light" style={{ maxWidth: '80%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                             {truncateTitle(displayWorks[0].title)}
                         </div>
                     </div>
@@ -126,7 +126,7 @@ export default function HeroWorks() {
                                 fill
                                 className="object-cover"
                             />
-                            <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                            <div className="pointer-events-none absolute left-0 bottom-0 rounded-full backdrop-blur-sm from-black/10 to-transparent px-5 py-2 text-lg font-light text-white bg-linear-to-t font-onest-light" style={{ maxWidth: '80%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                 {truncateTitle(displayWorks[1].title)}
                             </div>
                         </div>
@@ -148,7 +148,7 @@ export default function HeroWorks() {
                                     fill
                                     className="object-cover"
                                 />
-                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                <div className="pointer-events-none absolute left-0 bottom-0 rounded-full backdrop-blur-sm from-black/10 to-transparent px-5 py-2 text-lg font-light text-white bg-linear-to-t font-onest-light" style={{ maxWidth: '80%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                     {truncateTitle(displayWorks[2].title)}
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ export default function HeroWorks() {
                                     fill
                                     className="object-cover"
                                 />
-                                <div className="pointer-events-none absolute rounded-bl-xs rounded-full inset-x-0 bottom-0 backdrop-blur-sm from-black/10 to-transparent px-5 py-1 text-lg font-light text-white bg-linear-to-t w-fit font-onest-light max-w-50">
+                                <div className="pointer-events-none absolute left-0 bottom-0 rounded-full backdrop-blur-sm from-black/10 to-transparent px-5 py-2 text-lg font-light text-white bg-linear-to-t font-onest-light" style={{ maxWidth: '80%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                     {truncateTitle(displayWorks[1].title)}
                                 </div>
                             </div>

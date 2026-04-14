@@ -72,7 +72,7 @@ export default function NewsPage() {
     }
 
     const isVideoUrl = (url: string) =>
-        url.endsWith(".mp4") || url.endsWith(".webm")
+        /\.(mp4|webm|mov)$/i.test(url)
 
     const formattedDate = new Date(news.createdAt).toLocaleDateString("ru-RU", {
         day: "numeric",
@@ -97,7 +97,7 @@ export default function NewsPage() {
                         {isVideoUrl(news.cover) ? (
                             <video
                                 src={news.cover}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain"
                                 controls
                             />
                         ) : (
@@ -138,6 +138,7 @@ export default function NewsPage() {
                                     </h3>
                                 )
                             case "image":
+                                if (!block.content) return null
                                 return (
                                     <div key={block.id} className="rounded-2xl overflow-hidden">
                                         <AspectRatio ratio={16 / 9}>

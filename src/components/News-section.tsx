@@ -183,22 +183,22 @@ export default function NewsSection() {
                     {/* Left column: Title + Text + Подробнее */}
                     <div className="flex-1 flex flex-col gap-5 min-w-0">
                         {/* Title badge */}
-                        <div className="flex items-start">
-                            <div className="p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl h-fit">
+                        <Link href={`/news/${current.id}`} className="flex items-start group min-w-0 w-full">
+                            <div className="p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl h-fit group-hover:from-[#1DCD9F]/50 group-hover:to-[#1DCD9F]/20 transition-all duration-300 min-w-0 w-full">
                                 <div className="bg-black rounded-xl px-6 py-2.5">
-                                    <h3 className="text-[#1DCD9F] text-2xl font-bold wrap-break-word">{current.title.length > 25 ? current.title.slice(0, 25) + '...' : current.title}</h3>
+                                    <h3 className="text-[#1DCD9F] text-2xl font-bold break-all">{current.title}</h3>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
 
                         {/* Text */}
-                        <div className="flex-1 min-h-0 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl">
+                        <Link href={`/news/${current.id}`} className="flex-1 min-h-0 p-px bg-linear-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl hover:from-[#1DCD9F]/50 hover:to-[#1DCD9F]/20 transition-all duration-300">
                             <div className="bg-[#111111] rounded-xl p-6 h-full overflow-hidden">
                                 <p className="text-white/80 text-base leading-relaxed wrap-break-word line-clamp-[12]">
                                     {previewText || "Нет описания"}
                                 </p>
                             </div>
-                        </div>
+                        </Link>
 
                         {/* Подробнее button */}
                         <Button
@@ -212,15 +212,26 @@ export default function NewsSection() {
                         </Button>
                     </div>
 
-                    {/* Right column: Cover image with "Наши соцсети" cutout */}
+                    {/* Right column: Cover image/video with "Наши соцсети" cutout */}
                     <div className="flex-1 rounded-2xl relative overflow-hidden min-h-[45rem]">
                         {current.cover ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                                src={current.cover}
-                                alt={current.title}
-                                className="w-full h-full object-cover rounded-2xl absolute inset-0"
-                            />
+                            /\.(mp4|webm|mov)$/i.test(current.cover) ? (
+                                <video
+                                    src={current.cover}
+                                    className="w-full h-full object-cover rounded-2xl absolute inset-0"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                />
+                            ) : (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                    src={current.cover}
+                                    alt={current.title}
+                                    className="w-full h-full object-cover rounded-2xl absolute inset-0"
+                                />
+                            )
                         ) : (
                             <div className="w-full h-full bg-[#1a1a1a] rounded-2xl absolute inset-0" />
                         )}
