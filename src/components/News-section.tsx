@@ -236,77 +236,7 @@ export default function NewsSection() {
                             <div className="w-full h-full bg-[#1a1a1a] rounded-2xl absolute inset-0" />
                         )}
 
-                        {/* Mask: background-colored shape that cuts into the image */}
-                        <div className="absolute bottom-0 right-0 bg-[#222] rounded-tl-3xl pt-4 pl-4 z-10">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button
-                                        variant="default"
-                                        className="w-85 bg-[#0a0a0a/100] border-[#1DCD9F] border-2 rounded-xl h-auto py-4 text-white text-2xl font-semibold hover:bg-[#151515] font-onest-medium cursor-pointer"
-                                    >
-                                        Наши соцсети
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="w-[calc(100%-2rem)] sm:max-w-md bg-[#0a0a0a] border-[#1DCD9F]/30">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-[#1DCD9F] text-2xl font-bold text-center">
-                                            Наши социальные сети
-                                        </DialogTitle>
-                                        <DialogDescription className="text-white/70 text-center">
-                                            Присоединяйтесь к нам в социальных сетях
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="flex flex-col gap-4 py-4">
-                                        {/* Telegram */}
-                                        <a
-                                            href="https://t.me/basebeauty_decor"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group"
-                                        >
-                                            <div className="p-px bg-gradient-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl hover:from-[#1DCD9F] hover:via-[#1DCD9F]/50 hover:to-[#1DCD9F]/30 transition-all duration-300">
-                                                <div className="bg-[#111111] rounded-xl p-4 flex items-center gap-4 group-hover:bg-[#151515] transition-all">
-                                                    <div className="w-12 h-12 rounded-full bg-[#0088cc] flex items-center justify-center shrink-0">
-                                                        <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="flex-1 font-onest">
-                                                        <h4 className="text-white font-semibold text-lg">Telegram</h4>
-                                                        <p className="text-white/60 text-sm">Следите за новостями</p>
-                                                    </div>
-                                                    <ArrowRight className="w-5 h-5 text-[#1DCD9F] group-hover:translate-x-1 transition-transform" />
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        {/* Instagram */}
-                                        <a
-                                            href="https://www.instagram.com/base_beauty_decor?igsh=cW1nbW9rZ2ZjYWJw"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group"
-                                        >
-                                            <div className="p-px bg-gradient-to-bl from-gray-700 via-gray-800 to-stone-400 rounded-xl hover:from-[#1DCD9F] hover:via-[#1DCD9F]/50 hover:to-[#1DCD9F]/30 transition-all duration-300">
-                                                <div className="bg-[#111111] rounded-xl p-4 flex items-center gap-4 group-hover:bg-[#151515] transition-all">
-                                                    <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center shrink-0">
-                                                        <span className="text-white font-bold text-lg">I</span>
-                                                    </div>
-                                                    <div className="flex-1 font-onest">
-                                                        <h4 className="text-white font-semibold text-lg">Instagram*</h4>
-                                                        <p className="text-white/60 text-sm">Наше сообщество</p>
-                                                    </div>
-                                                    <ArrowRight className="w-5 h-5 text-[#1DCD9F] group-hover:translate-x-1 transition-transform" />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <p className="text-white/50 text-xs text-center mt-2">
-                                        *Организации запрещены в РФ и признаны экстремистскими
-                                    </p>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

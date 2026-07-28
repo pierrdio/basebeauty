@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -15,22 +15,59 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner";
 
+function formatLockMessage(seconds: number) {
+  const minutes = Math.ceil(seconds / 60);
+  if (minutes <= 1) {
+    return "Слишком много попыток. Повторите через 1 минуту.";
+  }
+  return `Слишком много попыток. Повторите через ${minutes} мин.`;
+}
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false);
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
   const router = useRouter();
+
+  const isLocked = lockedUntil !== null && remainingSeconds > 0;
+
+  useEffect(() => {
+    if (!lockedUntil) return;
+
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((lockedUntil - Date.now()) / 1000));
+      setRemainingSeconds(left);
+      if (left <= 0) {
+        setLockedUntil(null);
+      }
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [lockedUntil]);
+
+  const applyLock = (retryAfterSeconds?: number) => {
+    const seconds = retryAfterSeconds ?? 60;
+    setLockedUntil(Date.now() + seconds * 1000);
+    setRemainingSeconds(seconds);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isLocked) {
+      toast.error(formatLockMessage(remainingSeconds));
+      return;
+    }
+
     setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const login = formData.get('login') as string;
     const password = formData.get('password') as string;
-
-    console.log('LoginForm - Submitting:', { login, passwordProvided: !!password });
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -41,18 +78,20 @@ export function LoginForm({
         body: JSON.stringify({ login, password }),
       });
 
-      console.log('LoginForm - Response status:', response.status);
       const data = await response.json();
-      console.log('LoginForm - Response data:', data);
 
       if (response.ok) {
         toast.success('Успешный вход в систему');
-        console.log('LoginForm - Redirecting to dashboard');
-        console.log('LoginForm - Cookies:', document.cookie);
         router.push('/dashboard');
+      } else if (response.status === 429) {
+        applyLock(data.retryAfterSeconds);
+        toast.error(data.error || formatLockMessage(data.retryAfterSeconds ?? 60));
       } else {
-        toast.error(data.error || 'Ошибка входа');
-        console.log('LoginForm - Login failed:', data.error);
+        const hint =
+          typeof data.remainingAttempts === 'number'
+            ? ` Осталось попыток: ${data.remainingAttempts}.`
+            : '';
+        toast.error((data.error || 'Ошибка входа') + hint);
       }
     } catch (error) {
       console.error('LoginForm - Network error:', error);
@@ -68,7 +107,9 @@ export function LoginForm({
         <CardHeader>
           <CardTitle>Вход в систему</CardTitle>
           <CardDescription>
-            Введите логин и пароль для входа в систему
+            {isLocked
+              ? formatLockMessage(remainingSeconds)
+              : "Введите логин и пароль для входа в систему"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,7 +123,7 @@ export function LoginForm({
                   type="text"
                   placeholder="Введите логин"
                   required
-                  disabled={isLoading}
+                  disabled={isLoading || isLocked}
                 />
               </div>
               <div className="grid gap-3">
@@ -95,16 +136,20 @@ export function LoginForm({
                   type="password"
                   placeholder="Введите пароль"
                   required
-                  disabled={isLoading}
+                  disabled={isLoading || isLocked}
                 />
               </div>
               <div className="flex flex-col gap-3">
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={isLoading}
+                  disabled={isLoading || isLocked}
                 >
-                  {isLoading ? 'Вход...' : 'Войти'}
+                  {isLocked
+                    ? `Подождите ${remainingSeconds} сек.`
+                    : isLoading
+                      ? 'Вход...'
+                      : 'Войти'}
                 </Button>
               </div>
             </div>
